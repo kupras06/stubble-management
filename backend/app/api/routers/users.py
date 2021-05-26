@@ -13,7 +13,7 @@ from app.api import deps
 from app.core.config import settings
 from app.utils import send_new_account_email
 from . import get_user_db
-from app.services.transaction import transaction
+# from app.services.transaction import transaction
 router = APIRouter()
 
 
@@ -22,7 +22,8 @@ async def read_users(
     db: Any = Depends(get_user_db),
     skip: int = 0,
     limit: int = 100,
-    current_user: schemas.user.UserBase = Depends(deps.get_current_active_superuser),
+    current_user: schemas.user.UserBase = Depends(
+        deps.get_current_active_superuser),
 ) -> Any:
     """
     Retrieve users.
@@ -38,7 +39,8 @@ async def create_user(
     *,
     db: Any = Depends(get_user_db),
     user_in: schemas.user.UserSignUp,
-    current_user: schemas.user.UserBase = Depends(deps.get_current_active_superuser),
+    current_user: schemas.user.UserBase = Depends(
+        deps.get_current_active_superuser),
 ) -> Any:
     """
     Create new user.
@@ -64,7 +66,8 @@ async def update_user_me(
     *,
     db: Any = Depends(get_user_db),
     user_in: schemas.UserUpdate,
-    current_user: schemas.user.UserBase = Depends(deps.get_current_active_user),
+    current_user: schemas.user.UserBase = Depends(
+        deps.get_current_active_user),
 ) -> Any:
     """
     Update own user.
@@ -78,7 +81,8 @@ async def update_user_me(
 @router.get("/me", response_model=schemas.UserModel)
 def read_user_me(
     db: Any = Depends(get_user_db),
-    current_user: schemas.user.UserBase = Depends(deps.get_current_active_user),
+    current_user: schemas.user.UserBase = Depends(
+        deps.get_current_active_user),
 ) -> Any:
     """
     Get current user.
@@ -115,7 +119,8 @@ async def create_user_open(
 @router.get("/{user_id}", response_model=schemas.UserModel)
 async def read_user_by_id(
     user_id: str,
-    current_user: schemas.user.UserBase = Depends(deps.get_current_active_user),
+    current_user: schemas.user.UserBase = Depends(
+        deps.get_current_active_user),
     db: Any = Depends(get_user_db),
 ) -> Any:
     """
@@ -138,7 +143,8 @@ async def update_user(
     db: Any = Depends(get_user_db),
     user_id: str,
     user_in: schemas.UserUpdate,
-    current_user: schemas.user.UserBase = Depends(deps.get_current_active_superuser),
+    current_user: schemas.user.UserBase = Depends(
+        deps.get_current_active_superuser),
 ) -> Any:
     """
     Update a user.
