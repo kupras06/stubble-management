@@ -1,28 +1,30 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import {
-  Button,
-  Form,
-  Grid,
-  Header,
-  Image,
-  Message,
-  Segment,
-} from 'semantic-ui-react'
-
+import { Form, Grid, Header, Message, Segment } from 'semantic-ui-react'
+import { login } from '../../utils/auth'
 export default class RegisterForm extends Component {
   state = {
     formData: {},
   }
-  handleChange = (e,{ value}) => {
-      const data = this.state.formData
-      data[e.target.name] = value
-      this.setState({formData : { ...data }})
+  handleChange = (e, { value }) => {
+    const data = this.state.formData
+    data[e.target.name] = value
+
+    this.setState({ formData: { ...data } })
+  }
+  validate = () => {
+    const { email, password, password2 } = this.state.formData
+    console.log(this.state.formData, email)
+    const re = /\S+@\S+\.\S+/
+    console.log(`re.test(email)`, re.test(email))
+    if (!re.test(email)) return false
+    if (password !== password2) return false
+    return true
   }
   handleFormSubmit = (e) => {
     e.preventDefault()
-    console.log(this.state.formData)
-    console.log(e)
+    if (this.validate()) login(this.state.formData)
+    else console.log('failed')
   }
   render() {
     return (

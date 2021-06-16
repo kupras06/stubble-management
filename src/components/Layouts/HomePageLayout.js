@@ -20,10 +20,10 @@ export default class HomePageLayout extends Component {
             <Grid.Row verticalAlign="middle">
               <Grid.Column>
                 <Header inverted text>
-                  Are an agriculturist or have acces to a lot of stubble,, then
+                  Are you an agriculturist or have access to a lot of stubble,, then
                   go on explore the possibilites
                 </Header>
-                <Button primary as={Link} to="/login">
+                <Button primary as={Link} to="/sign-up">
                   Sign Up Now
                 </Button>
               </Grid.Column>
