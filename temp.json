@@ -1,0 +1,11 @@
+{
+  "name": "NewName",
+  "email": "user@example.com",
+  "address": "string",
+  "city": "Bangalore",
+  "pin_code": "560049",
+  "state": "Karnataka",
+  "country": "India",
+  "phone_number": "9606172957",
+  "owner_id": "608d9c0f5b446b50bb5164db"
+}
