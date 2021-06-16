@@ -9,7 +9,7 @@ import {
   Message,
   Segment,
 } from 'semantic-ui-react'
-
+import { login } from '../../utils/auth'
 export default class RegisterForm extends Component {
   state = {
     formData: {},
@@ -19,10 +19,17 @@ export default class RegisterForm extends Component {
       data[e.target.name] = value
       this.setState({formData : { ...data }})
   }
+  validate = () => {
+    const { email, password, password2 } = this.state.formData
+    const re = /\S+@\S+\.\S+/;
+    if(!re.test(email) || password!==password2)
+      return false
+    return true
+  }
   handleFormSubmit = (e) => {
     e.preventDefault()
-    console.log(this.state.formData)
-    console.log(e)
+    if (this.validate())
+      login(this.state.formData)
   }
   render() {
     return (
