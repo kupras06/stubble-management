@@ -1,13 +1,8 @@
-from pydantic.utils import Obj
-from app.schemas import styles, transaction
-from app.schemas.user import UserBase, UserModel
+from app.schemas import  transaction
 from app.core.messages import message
 from typing import Any, List
 from app.helpers import mongo_helper
-from fastapi import APIRouter, Body, Depends, HTTPException
-from fastapi.encoders import jsonable_encoder
-from pydantic.networks import EmailStr
-from bson import ObjectId
+from fastapi import APIRouter, Depends, HTTPException
 from app import crud, schemas
 from app.api import deps
 from app.core.config import settings
@@ -58,7 +53,7 @@ async def create_user(
     return user
 
 
-@router.put("/me", response_model=schemas.UserModel)
+@router.put("/me", response_model=schemas.user.UserModel)
 async def update_user_me(
     *,
     db: Any = Depends(get_user_db),
@@ -74,7 +69,7 @@ async def update_user_me(
     return user
 
 
-@router.get("/me", response_model=schemas.UserModel)
+@router.get("/me", response_model=schemas.user.UserModel)
 def read_user_me(
     db: Any = Depends(get_user_db),
     current_user: schemas.user.UserBase = Depends(deps.get_current_active_user),
@@ -85,7 +80,7 @@ def read_user_me(
     return current_user
 
 
-@router.post("/open", response_model=schemas.UserModel)
+@router.post("/open", response_model=schemas.user.UserModel)
 async def create_user_open(
     *,
     db: Any = Depends(get_user_db),
@@ -111,7 +106,7 @@ async def create_user_open(
     return user
 
 
-@router.get("/{user_id}", response_model=schemas.UserModel)
+@router.get("/{user_id}", response_model=schemas.user.UserModel)
 async def read_user_by_id(
     user_id: str,
     current_user: schemas.user.UserBase = Depends(deps.get_current_active_user),
@@ -131,7 +126,7 @@ async def read_user_by_id(
     return user
 
 
-@router.put("/{user_id}", response_model=schemas.UserModel)
+@router.put("/{user_id}", response_model=schemas.user.UserModel)
 async def update_user(
     *,
     db: Any = Depends(get_user_db),
@@ -149,7 +144,7 @@ async def update_user(
             detail="The user with this username does not exist in the system",
         )
     message.Json(user,'UPDATE BY ID')
-    user = await crud.user.update(db, db_obj=schemas.UserModel(**user), obj_in=user_in)
+    user = await crud.user.update(db, db_obj=schemas.user.UserModel(**user), obj_in=user_in)
     return user
 
 
@@ -159,7 +154,7 @@ async def create_user_order(
     *,
     db: Any = Depends(deps.get_db),
     order_in: schemas.TransactionBase,
-    current_user: schemas.UserModel = Depends(deps.get_current_active_superuser),
+    current_user: schemas.user.UserModel = Depends(deps.get_current_active_superuser),
 ) -> Any:
     """
     Create new user order
@@ -177,7 +172,7 @@ async def create_user_order(
     message.Info(f'Type {type(user)}')
     # message.Json(user)
     # if user and shop and style :
-    res = await transaction.create_transaction(UserModel(**user),schemas.ShopModel(**shop),schemas.StyleModel(**style),db=db.Transactions)
+    res = await transaction.create_transaction(schemas.user.UserModel(**user),schemas.ShopModel(**shop),schemas.StyleModel(**style),db=db.Transactions)
     return res
     # await crud.style.get(db.Styles,{'_id':order_in.style_id})
     # transaction = awai
