@@ -29,7 +29,7 @@ async def get_db() -> Any:
     try:
         
         db = motor.motor_asyncio.AsyncIOMotorClient(settings.DB_URL)
-        yield db['Buddy']
+        yield db['Stubble']
         
     finally:
         pass

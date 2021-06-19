@@ -47,7 +47,7 @@ class UserModel(MongoBase):
     is_superuser : bool = False
     is_active : bool = True
     is_shop : bool = False
-    ROLE : str
+    ROLE : str = 'Farmer'
     
     class Config :
         anystr_strip_whitespace = True  # strip whitespaces from strings
