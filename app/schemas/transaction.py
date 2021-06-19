@@ -36,21 +36,15 @@ class MongoBase(BaseModel):
 
 class TransactionBase(BaseModel):
     user_id : PyObjectId
-    shop_id : PyObjectId
-    style_id : PyObjectId
-    # appointed_time : datetime.time
-    appointed_date : datetime.datetime = datetime.datetime.now()
+    stubble_id : PyObjectId
 
 class TransactionUpdate(BaseModel):
     user_id : PyObjectId
-    shop_id : PyObjectId
-    style_id : PyObjectId
-    # appointed_time : datetime.time
-    appointed_date : datetime.datetime = datetime.datetime.now()
+    stubble_id : PyObjectId
+
     
 class TransactionIn(TransactionBase):
     order_date : datetime.datetime = datetime.datetime.now()
-    transaction_id : str
     transaction_amt : float
     
 class TransactionModel(MongoBase,TransactionIn):
