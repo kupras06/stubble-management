@@ -1,6 +1,7 @@
 from typing import Optional
 from bson import ObjectId
 from pydantic import BaseModel, Field, BaseConfig
+from pydantic.networks import AnyHttpUrl
 
 
 class PyObjectId(ObjectId):
@@ -38,6 +39,7 @@ class StubbleModelIn(BaseModel):
     name : str
     price : int
     quantity : int 
+    image_url : AnyHttpUrl
     owner : PyObjectId = "60cdf8f7f9d9f2b844d2f3ac"
 
 class StubbleModel(MongoBase,StubbleModelIn):
