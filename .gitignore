@@ -180,7 +180,6 @@ typings/
 .yarn-integrity
 
 # dotenv environment variables file
-.env
 .env.test
 .env*.local
 
@@ -337,7 +336,7 @@ celerybeat.pid
 
 # Environments
 # .env
-.env/
+
 .venv/
 env/
 venv/
