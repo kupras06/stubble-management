@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.api.api_v1.routers import  login, users,shops,styles , transactions
+from app.api.routers import  login, users,shops,styles , transactions
 
 api_router = APIRouter()
 api_router.include_router(login.router, tags=["Login"])
