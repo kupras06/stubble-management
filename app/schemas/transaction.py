@@ -37,6 +37,7 @@ class MongoBase(BaseModel):
 class TransactionBase(BaseModel):
     user_id : PyObjectId
     stubble_id : PyObjectId
+    quantity : int
 
 class TransactionUpdate(BaseModel):
     user_id : PyObjectId
