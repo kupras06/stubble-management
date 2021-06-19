@@ -63,6 +63,9 @@ class SecuritySettings(BaseSettings):
     SECRET_KEY:str
     HASH_ALGO :str 
     ACCESS_TOKEN_EXPIRE_MINUTES : int 
+    CLOUD_NAME : str 
+    CLOUDINARY_API_KEY : str
+    CLOUDINARY_API_SECRET : str 
 
 class Settings(ServerSettings,DatabaseSettings,SecuritySettings,ColorSettings):
     class Config:

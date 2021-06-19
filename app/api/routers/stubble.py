@@ -1,3 +1,4 @@
+from app.core.config import settings
 from fastapi.datastructures import UploadFile
 from fastapi.param_functions import File
 from app import crud, schemas
@@ -55,17 +56,14 @@ async def upload_image(
     """
     Upload a Stubble Image
     """
-    # pprint.pprint(user_in)
-    # if
     cloudinary.config(
-        cloud_name="dokwogzay",
-        api_key="788945125166481",
-        api_secret="bIRfDum8e45WwrDjglrJq8E7uJI"
+        cloud_name=settings.CLOUD_NAME,
+        api_key=settings.CLOUDINARY_API_KEY,
+        api_secret=settings.CLOUDINARY_API_SECRET
     )
 
     filename = os.path.splitext(file.filename)[0]
-    API_ENV = 'cloudinary://788945125166481:bIRfDum8e45WwrDjglrJq8E7uJI@dokwogzay'
-    # default_app = firebase_admin.initialize_app()
+    
     temp_file = await file.read()
     res = cloudinary.uploader.upload(temp_file,
                                      folder="/Stubbler",
