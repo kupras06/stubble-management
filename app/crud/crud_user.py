@@ -59,8 +59,6 @@ class CRUDUser(CRUDBase[UserBase, UserSignUp, UserUpdate]):
 
     def is_superuser(self, user: UserModel) -> bool:
         return user.is_superuser
-        
-    def is_shop(self,user:UserModel) -> bool : 
-        return user.is_shop
+       
 
 user = CRUDUser(UserModel)

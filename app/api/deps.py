@@ -89,17 +89,6 @@ def get_current_active_user(
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
 
-
-def get_current_shop_user(
-    current_user: schemas.user.UserBase = Depends(get_current_user),
-) -> schemas.user.UserBase:
-    if get_current_active_superuser:
-        return True
-    if not crud.user.is_shop(current_user):
-        raise HTTPException(status_code=400, detail="User Not in Owner's List")
-    return current_user
-
-
 def get_current_active_superuser(
     current_user: schemas.user.UserModel = Depends(get_current_user),
 ) -> schemas.user.UserBase:

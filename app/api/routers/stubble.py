@@ -11,7 +11,7 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 import os
-
+from app.helpers import mongo_helper
 router = APIRouter()
 
 
@@ -72,3 +72,15 @@ async def upload_image(
                                      resource_type="image")
     return res['secure_url']
   
+
+@router.get("/{stubble_id}", response_model=schemas.stubble.StubbleModel)
+async def get_transaction_by_id(
+    stubble_id: str,
+    current_user: schemas.user.UserBase = Depends(deps.get_current_active_user),
+    db: Any = Depends(get_stubble_db),
+) -> Any:
+    """
+    Get a specific user by id.
+    """
+    transaction = await crud.transaction.get(db,{'_id': mongo_helper.str_to_bson(stubble_id)})
+    return transaction

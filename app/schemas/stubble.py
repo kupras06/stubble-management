@@ -32,7 +32,7 @@ class MongoBase(BaseModel):
     def __init__(self, **pydict):
         super().__init__(**pydict)
         self.id = pydict.get('_id')
-        print("IN CONST",self.id,pydict.get('_id'))
+        # print("IN CONST",self.id,pydict.get('_id'))
 
 class StubbleModelIn(BaseModel):
     type : str

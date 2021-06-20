@@ -31,7 +31,7 @@ class MongoBase(BaseModel):
     def __init__(self, **pydict):
         super().__init__(**pydict)
         self.id = pydict.get('_id')
-        print("IN CONST",self.id,pydict.get('_id'))
+        # print("IN CONST",self.id,pydict.get('_id'))
 
 class UserModel(MongoBase):
     first_name : str 
@@ -46,7 +46,6 @@ class UserModel(MongoBase):
     hashed_password : str 
     is_superuser : bool = False
     is_active : bool = True
-    is_shop : bool = False
     ROLE : str = 'Farmer'
     
     class Config :
@@ -57,13 +56,14 @@ class UserBase(MongoBase):
     first_name : str 
     last_name : str 
     email : EmailStr
+    ROLE : str
     
 
 class UserBaseIn(BaseModel):
     first_name : str 
     last_name : str 
     email : EmailStr
-    
+    ROLE : str
 
 class UserSignUp(UserBaseIn):
     password : str 

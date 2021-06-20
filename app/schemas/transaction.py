@@ -31,12 +31,12 @@ class MongoBase(BaseModel):
     def __init__(self, **pydict):
         super().__init__(**pydict)
         self.id = pydict.get('_id')
-        print("IN CONST",self.id,pydict.get('_id'))
+        # print("IN CONST",self.id,pydict.get('_id'))
 
 
 class TransactionBase(BaseModel):
-    user_id : PyObjectId
-    stubble_id : PyObjectId
+    user_id : str
+    stubble_id : str
     quantity : int
 
 class TransactionUpdate(BaseModel):

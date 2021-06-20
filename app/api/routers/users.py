@@ -153,26 +153,27 @@ async def update_user(
 async def create_user_order(
     *,
     db: Any = Depends(deps.get_db),
-    order_in: schemas.TransactionBase,
-    current_user: schemas.user.UserModel = Depends(deps.get_current_active_superuser),
+    order_in : schemas.transaction.TransactionBase,
+    current_user: schemas.user.UserModel = Depends(deps.get_current_user),
 ) -> Any:
     """
     Create new user order
     """
     # db : Any = Depends(deps.get_transact_db)
-    if current_user.id != order_in.user_id :
+    # print(type(order_in.user_id),'TYPE')
+    if mongo_helper.str_to_bson( order_in.user_id) != current_user.id:
         raise HTTPException(
             status_code=400,
             detail="The user not authorized for this transaction",
         )
-    user = await crud.user.get(db.User,{'_id':order_in.user_id})
-    shop = await crud.shop.get(db.Shops,{'_id':order_in.shop_id})
-    style = await crud.style.get(db.Styles,{'_id':order_in.style_id})
-    message.Info('Calling Service')
-    message.Info(f'Type {type(user)}')
+    # user = await crud.user.get(db.User,{'_id':order_in.user_id})
+    stubble = await crud.stubble.get(db.Stubble,{'_id':order_in.stubble_id})
+    # message.Info('Calling Service')
+    # message.Info(f'Type {type(user)}')
     # message.Json(user)
+    message.Json(stubble)
     # if user and shop and style :
-    res = {}
+    res = {'message':'Done'}
     # res = await transaction.create_transaction(schemas.user.UserModel(**user),schemas.ShopModel(**shop),schemas.StyleModel(**style),db=db.Transactions)
     return res
     # await crud.style.get(db.Styles,{'_id':order_in.style_id})

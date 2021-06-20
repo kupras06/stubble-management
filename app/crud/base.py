@@ -22,8 +22,9 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         self.model = model
 
     async def get(self, db: Any, document:Dict):
+        print('IN GET')
         result =  await db.find_one(document)
-        message.Json(result,f'Get {db.name} By {document} Result')
+        # message.Json(result,f'Get {db.name} By {document} Result')
         return result
 
     async def get_multi(
