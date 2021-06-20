@@ -2,14 +2,14 @@ import decodeJwt from 'jwt-decode'
 import { API_URL } from "../config"
 
 
-export const signup = async ({first_name,last_name, email, password }) => {
+export const signup = async ({first_name,last_name, email, password },role) => {
   // Assert email or password is not empty
   console.log('in signup')
   if (!(email.length > 0) || !(password.length > 0) || !(first_name.length>0) || !(last_name.length>0)) {
     throw new Error('Email or password was not provided')
   }
   const formData = {
-    email,first_name,last_name,password
+    email,first_name,last_name,password,role
   }
   const request = new Request(
     `${API_URL}users/open`,
@@ -79,7 +79,7 @@ export const login = async ({email, password }) => {
     const decodedToken = decodeJwt(data['access_token'])
     localStorage.setItem('token', data['access_token'])
     localStorage.setItem('auth',true)
-    localStorage.setItem('permissions', decodedToken.permissions)
+    getCurrentUser()
   } 
   console.log(data)
 
@@ -89,7 +89,7 @@ export const login = async ({email, password }) => {
 
 export const isAuthenticated = () => {
   const auth = localStorage.getItem('auth')
-  console.log(`auth`, auth)
+  console.log('auth', auth)
   return auth ? true : false
 };
 
@@ -101,7 +101,7 @@ export const logout = () => {
 
 export const getCurrentUser = async () => {
   const token = localStorage.getItem("token");
-  const request = new Request(API_URL + "/users/me", {
+  const request = new Request(API_URL + "users/me", {
     method: "GET",
     headers: {
       Authorization: "Bearer " + token,
@@ -111,5 +111,16 @@ export const getCurrentUser = async () => {
 
   const data = await response.json();
   console.log(data);
+    const { ROLE } = data
+    console.log(`role`, ROLE)
+    localStorage.setItem('role', ROLE.toUpperCase())
   return data;
 };
+
+
+export const verifyRole = (verifyRole) => {
+  const auth = localStorage.getItem('auth')
+  const role = localStorage.getItem('role')
+  console.log(role,verifyRole)
+  return auth ? role==verifyRole ? true : false : false
+}

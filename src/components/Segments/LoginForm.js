@@ -77,9 +77,9 @@ export default class LoginForm extends Component {
               </button>
             </Segment>
           </Form>
-          <Message>
+          {/* <Message>
             New here? <Link to="/sign-up">Sign Up</Link>
-          </Message>
+          </Message> */}
         
         </Grid.Column>
         {this.state.login ? <Redirect to="/stubbles" />:null}

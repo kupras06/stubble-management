@@ -16,54 +16,46 @@ import LoginForm from './components/Segments/LoginForm'
 import RegisterForm from './components/Segments/RegisterForm'
 import StubbleList from './pages/StubbleList'
 import { logout } from './utils/auth'
-
-// This example has 3 pages: a public page, a protected
-// page, and a login screen. In order to see the protected
-// page, you must first login. Pretty standard stuff.
-//
-// First, visit the public page. Then, visit the protected
-// page. You're not yet logged in, so you are redirected
-// to the login page. After you login, you are redirected
-// back to the protected page.
-//
-// Notice the URL change each time. If you click the back
-// button at this point, would you expect to go back to the
-// login page? No! You're already logged in. Try it out,
-// and you'll see you go back to the page you visited
-// just *before* logging in, the public page.
-
-export default function Routes() {
+import { verifyRole } from './utils/auth'
+export default function Routes(props) {
   return (
     <ProvideAuth>
       <Router>
         <div>
-          {/* <AuthButton /> */}
-
           <NavBar />
 
           <Switch>
             <Route path="/" exact>
-           <Home />
+              <Home />
             </Route>
             <Route path="/login" exact>
               <LoginForm />
             </Route>
-            <Route path="/sign-up" exact>
-              <RegisterForm />
+            <Route path="/farmer/sign-up" exact>
+              <RegisterForm role="FARMER" />
             </Route>
-            <Route path="/stubbles" exact>
-              <StubbleList />
+            <Route path="/buyer/sign-up" exact>
+              <RegisterForm role="BUYER" />
             </Route>
+            <Route
+              path="/stubbles"
+              exact
+              {...props}
+              render={(props) =>
+                verifyRole('BUYER') ? (
+                  <StubbleList {...props} />
+                ) : (
+                  <Redirect to="/login"></Redirect>
+                )
+              }
+            />
+
             <Route path="/stubble/:id" exact>
               <OrderPage />
             </Route>
-           
-            <Route
-              path="/logout"
-              render={()=>logout()}
-              exact
-            />
-             
+
+            <Route path="/logout" render={() => logout()} exact />
+
             <Route path="*">
               <NoMatch />
             </Route>
@@ -86,10 +78,6 @@ const fakeAuth = {
   },
 }
 
-/** For more details on
- * `authContext`, `ProvideAuth`, `useAuth` and `useProvideAuth`
- * refer to: https://usehooks.com/useAuth/
- */
 const authContext = createContext()
 
 function ProvideAuth({ children }) {

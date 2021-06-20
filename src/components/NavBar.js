@@ -58,7 +58,14 @@ export default class MenuExampleInverted extends Component {
               active={activeItem === 'log-out'}
               onClick={logout}
             /> 
-          )}
+          )}<Menu.Item
+          as={Link}
+          icon="sign-out"
+          to="/"
+          name="log-out"
+          active={activeItem === 'log-out'}
+          onClick={logout}
+        /> 
         </Container>
       </Menu>
     )

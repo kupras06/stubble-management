@@ -35,7 +35,7 @@ export default class RegisterForm extends Component {
     e.preventDefault()
     console.log(this.state.formData)
     if (this.validate())
-    signup(this.state.formData)
+    signup(this.state.formData,this.props.role)
   }
   render() {
     return (
@@ -108,7 +108,7 @@ export default class RegisterForm extends Component {
               </button>
               {this.state.error ?  <Message negative>
             {this.state.error}
-          </Message>:null}
+          </Message>:<Message info>Note : You Are Signing Up as <b>{this.props.role}</b> <br/> If You don't want this go back </Message>}
             </Segment>
            
           </Form>

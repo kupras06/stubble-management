@@ -27,10 +27,15 @@ class OrderPage extends Component {
     super(props)
   }
   validate = () => {
-    if (this.state.qty > this.state.stubble.quantity || this.state.qty < 0 || this.state.amount < 0){
-      console.log('in if')
-      this.setState({ error: 'Invalid Quantity or Price', qty: 1 })
+    if (isNaN(this.state.qty) || isNaN(this.state.amount) ){
+      // console.log('in NAN')
+      this.setState({ qty : 1,amount:this.state.stubble.price})
     }
+    if ((this.state.qty > this.state.stubble.quantity || this.state.qty < 0 || this.state.amount < 0) && !this.state.error){
+      // console.log('in if')
+      this.setState({ error: 'Invalid Quantity or Price'})
+    }
+   
     else return true
   }
   open = () => {
@@ -38,18 +43,18 @@ class OrderPage extends Component {
   }
   close = () => this.setState({ confirm: false })
   placeOrder = () => {
-    console.log('confirmed')
+    // console.log('confirmed')
   }
   componentDidMount() {
     this.getStubbles()
   }
   componentDidUpdate(prevProps, prevState, snapshot) {
-    console.log('Updated',prevProps, prevState, snapshot,this.state)
-    
+    // console.log('Updated',prevProps, prevState, snapshot,this.state)
+    this.validate()
   }
   getStubbles = async () => {
     const { id } = this.props.match.params
-    console.log(id)
+    // console.log(id)
     const token = localStorage.getItem('token')
     const request = new Request(`${API_URL}stubble/${id}`, {
       method: 'GET',
@@ -67,7 +72,7 @@ class OrderPage extends Component {
     const response = await fetch(request)
 
     const data = await response.json()
-    console.log(data)
+    // console.log(data)
     this.setState({ stubble: data, loading: false, amount: data.price })
   }
 
@@ -139,7 +144,7 @@ class OrderPage extends Component {
                 })
               }}
               value={this.state.amount}
-              error={this.state.amount < 100 ? true : false}
+              error={this.state.amount < this.state.stubble.price ? true : false}
               defaultValue={1}
             >
               <Label color="teal">Price</Label>
@@ -153,7 +158,7 @@ class OrderPage extends Component {
               value={this.state.qty}
               onChange={(e) => {
                   const value = Number.parseFloat(e.target.value ?? '1')
-                  console.log(value)
+                  // console.log(value)
                   this.setState({
                     error: null,
                     qty: value,
@@ -162,7 +167,7 @@ class OrderPage extends Component {
                   })
                 
               }}
-              error={this.state.qty < 10 ? true : false}
+              error={this.state.qty < 1 ? true : false}
             >
               <Label color="teal">Weight (Kg)</Label>
               <input />
@@ -176,7 +181,7 @@ class OrderPage extends Component {
           </div>
           {this.state.error ? (
             <Message negative>{this.state.error}</Message>
-          ) : null}
+          ) : <Message info>Note : Minimum Value are Displayed initially</Message>}
         </Segment>
       </Container>
     )
