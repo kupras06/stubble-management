@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { Menu, Container } from 'semantic-ui-react'
+import { isAuthenticated, logout } from '../utils/auth'
 
 export default class MenuExampleInverted extends Component {
   state = { activeItem: 'home' }
@@ -30,14 +31,34 @@ export default class MenuExampleInverted extends Component {
             active={activeItem === 'aboutUs'}
             onClick={this.handleItemClick}
           />
-           <Menu.Item
+
+          <Menu.Item
+            as={Link}
+            to="/stubbles"
+            name="stubbles"
+            active={activeItem === 'aboutUs'}
+            onClick={this.handleItemClick}
+          />
+          {isAuthenticated ? (
+            <Menu.Item
             as={Link}
             icon="sign-in"
             to="/login"
             name="log-in"
-            active={activeItem === 'aboutUs'}
+            active={activeItem === 'log-in'}
             onClick={this.handleItemClick}
           />
+           
+          ) : (
+            <Menu.Item
+              as={Link}
+              icon="sign-out"
+              to="/"
+              name="log-out"
+              active={activeItem === 'log-out'}
+              onClick={logout}
+            /> 
+          )}
         </Container>
       </Menu>
     )

@@ -23,7 +23,7 @@ export default class HomePageLayout extends Component {
                   Are an agriculturist or have acces to a lot of stubble,, then
                   go on explore the possibilites
                 </Header>
-                <Button primary as={Link} to="/login">
+                <Button primary as={Link} to="/sign-up">
                   Sign Up Now
                 </Button>
               </Grid.Column>
@@ -37,7 +37,7 @@ export default class HomePageLayout extends Component {
                   available resources or checkout as guest
                 </Header>
 
-                <Button primary  as={Link} to="/login">Get Started</Button>
+                <Button primary  as={Link} to="/stubbles">Get Started</Button>
               </Grid.Column>
             
             </Grid.Row>

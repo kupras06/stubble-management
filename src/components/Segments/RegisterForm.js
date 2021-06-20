@@ -9,10 +9,13 @@ import {
   Message,
   Segment,
 } from 'semantic-ui-react'
-import { login } from '../../utils/auth'
+import { signup } from '../../utils/auth'
 export default class RegisterForm extends Component {
   state = {
-    formData: {},
+    formData: {
+      ROLE : 'farmer'
+    },
+    error:null,
   }
   handleChange = (e,{ value}) => {
       const data = this.state.formData
@@ -22,14 +25,17 @@ export default class RegisterForm extends Component {
   validate = () => {
     const { email, password, password2 } = this.state.formData
     const re = /\S+@\S+\.\S+/;
-    if(!re.test(email) || password!==password2)
+    if(!re.test(email) || !password || password!==password2){
+      this.setState({error:'Incorrect Data'})
       return false
+    }
     return true
   }
   handleFormSubmit = (e) => {
     e.preventDefault()
+    console.log(this.state.formData)
     if (this.validate())
-      login(this.state.formData)
+    signup(this.state.formData)
   }
   render() {
     return (
@@ -40,16 +46,36 @@ export default class RegisterForm extends Component {
       >
         <Grid.Column style={{ maxWidth: 450 }}>
           <Header as="h2" color="teal" textAlign="center">
-            WelCome
+            WelCome, Lets Get Started!
           </Header>
           <Form size="large" onSubmit={this.handleFormSubmit}>
             <Segment stacked>
-              <Form.Input
+            <Form.Input
+                fluid
+                icon="lock"
+                iconPosition="left"
+                placeholder="first_name"
+                type="first_name"
+                name="first_name"
+                required
+                onChange={this.handleChange}
+              /><Form.Input
+              fluid
+              icon="lock"
+              iconPosition="left"
+              placeholder="last_name"
+              type="last_name"
+              name="last_name"
+              required
+              onChange={this.handleChange}
+            />
+            <Form.Input
                 fluid
                 icon="user"
                 iconPosition="left"
                 placeholder="E-mail address"
                 name="email"
+                required
                 onChange={this.handleChange}
               />
               <Form.Input
@@ -59,13 +85,16 @@ export default class RegisterForm extends Component {
                 placeholder="Password"
                 type="password"
                 name="password"
+                required
                 onChange={this.handleChange}
               />
+              
               <Form.Input
                 fluid
                 icon="lock"
                 iconPosition="left"
                 placeholder="Password"
+                required
                 type="password"
                 name="password2"
                 onChange={this.handleChange}
@@ -77,10 +106,14 @@ export default class RegisterForm extends Component {
               >
                 Create Account
               </button>
+              {this.state.error ?  <Message negative>
+            {this.state.error}
+          </Message>:null}
             </Segment>
+           
           </Form>
           <Message>
-            New to us? <Link to="/sign-up">Sign Up</Link>
+            Already registered? <Link to="/login">Sign In</Link>
           </Message>
         </Grid.Column>
       </Grid>
