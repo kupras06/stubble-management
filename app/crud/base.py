@@ -28,14 +28,19 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         return result
 
     async def get_multi(
-        self, db: Any, *, skip: int = 0, limit: int = 100
+        self, db: Any, doc : Any = None, skip: int = 0, limit: int = 100
     ) -> List[ModelType]:
-        users = db.find().limit(limit).skip(skip)
-    
+        response = None
+        print(doc)
+        if doc:
+            response = db.find(doc).limit(limit).skip(skip)
+        else:
+            response = db.find(doc).limit(limit).skip(skip) 
         res  = []
-        print(users)
+
+        print(response)
     
-        async for user in users:
+        async for user in response:
             res.append(self.model(**user))
         print('RES : ',res)
         return res

@@ -15,11 +15,14 @@ async def get_transactions(
     db: Any = Depends(get_transaction_db),
     skip: int = 0,
     limit: int = 100,
+    current_user: schemas.user.UserBase = Depends(deps.get_current_user),
 ) -> Any:
     """
     Retrieve User Shops.
     """
-    transactions = await crud.transaction.get_multi(db, skip=skip, limit=limit)
+    
+    print(current_user)
+    transactions = await crud.transaction.get_multi(db,doc={"user_id":str(current_user.id)},skip=skip, limit=limit)
     return transactions
 
 

@@ -1,4 +1,5 @@
 
+from app.schemas import transaction
 from app.core.messages import message
 from typing import Any, List
 from app.helpers import mongo_helper
@@ -148,7 +149,7 @@ async def update_user(
     return user
 
 
-
+import uuid
 @router.post("/order" , tags=['Transactions']) #response_model=schemas.TransactionModel)
 async def create_user_order(
     *,
@@ -159,23 +160,14 @@ async def create_user_order(
     """
     Create new user order
     """
-    # db : Any = Depends(deps.get_transact_db)
-    # print(type(order_in.user_id),'TYPE')
     if mongo_helper.str_to_bson( order_in.user_id) != current_user.id:
         raise HTTPException(
             status_code=400,
             detail="The user not authorized for this transaction",
         )
-    # user = await crud.user.get(db.User,{'_id':order_in.user_id})
-    stubble = await crud.stubble.get(db.Stubble,{'_id':order_in.stubble_id})
-    # message.Info('Calling Service')
-    # message.Info(f'Type {type(user)}')
-    # message.Json(user)
-    message.Json(stubble)
-    # if user and shop and style :
+    # id = uuid.uuid4()
+    transaction = await crud.transaction.create(db=db.Transactions,obj_in=schemas.TransactionIn(**order_in.dict()))
+    # message.Json(transaction)
+    # 
     res = {'message':'Done'}
-    # res = await transaction.create_transaction(schemas.user.UserModel(**user),schemas.ShopModel(**shop),schemas.StyleModel(**style),db=db.Transactions)
-    return res
-    # await crud.style.get(db.Styles,{'_id':order_in.style_id})
-    # transaction = awai
-    # return user
+    return transaction

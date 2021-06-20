@@ -1,3 +1,4 @@
+from app import schemas
 from app.schemas import transaction
 from typing import Any, Dict, Optional, Union
 
@@ -6,9 +7,9 @@ from app.crud.base import CRUDBase
 from app.schemas.transaction import TransactionBase, TransactionModel, TransactionUpdate
 
 
-class CRUDTransaction(CRUDBase[TransactionModel, TransactionBase, TransactionUpdate]):
+class CRUDTransaction(CRUDBase[TransactionModel, schemas.TransactionIn, TransactionUpdate]):
    
-    async def create(self, db: Any, *, obj_in: TransactionBase) -> TransactionModel:
+    async def create(self, db: Any, *, obj_in: schemas.TransactionIn) -> TransactionModel:
         result = await db.insert_one(obj_in.dict())
         print(result.inserted_id)
         db_obj = await db.find_one({'_id': result.inserted_id})

@@ -1,4 +1,5 @@
 from typing import Optional
+import uuid
 from bson import ObjectId
 from pydantic import BaseModel, Field, BaseConfig
 import datetime
@@ -38,6 +39,7 @@ class TransactionBase(BaseModel):
     user_id : str
     stubble_id : str
     quantity : int
+    amount : float
 
 class TransactionUpdate(BaseModel):
     user_id : PyObjectId
@@ -46,7 +48,7 @@ class TransactionUpdate(BaseModel):
     
 class TransactionIn(TransactionBase):
     order_date : datetime.datetime = datetime.datetime.now()
-    transaction_amt : float
+    order_id : uuid.UUID = uuid.uuid4()
     
 class TransactionModel(MongoBase,TransactionIn):
     pass

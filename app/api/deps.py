@@ -38,14 +38,6 @@ def get_user_db(db : Any =  Depends(get_db)):
     if db:
         yield db.User
 
-def get_shop_db(db : Any =  Depends(get_db)):
-    if db:
-        yield db.Shops
-
-def get_style_db(db : Any =  Depends(get_db)):
-    if db:
-        yield db.Styles
-
 def get_transact_db(db : Any =  Depends(get_db)):
     if db:
         yield db.Transactions
@@ -55,6 +47,7 @@ def get_transact_db(db : Any =  Depends(get_db)):
 async def get_current_user(
     db: Any = Depends(get_db), token: str = Depends(reusable_oauth2)
 ) -> schemas.user.UserBase:
+    print('in current')
     try:
         payload = jwt.decode(
             token, settings.SECRET_KEY, algorithms=[security.ALGORITHM]
