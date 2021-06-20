@@ -22,15 +22,19 @@ import { API_URL } from '../config'
 import { withRouter } from 'react-router-dom'
 
 class OrderPage extends Component {
-  state = { loading: true, stubble: {}, qty: 1, amount: 1, confirm: false }
+  state = { loading: true, stubble: {}, qty: 1, amount: 1, confirm: false,error:null }
   constructor(props) {
     super(props)
   }
+  validate = () => {
+    if (this.state.qty > this.state.stubble.quantity || this.state.qty < 0 || this.state.amount < 0){
+      console.log('in if')
+      this.setState({ error: 'Invalid Quantity or Price', qty: 1 })
+    }
+    else return true
+  }
   open = () => {
-    if (this.state.qty > 5 && this.state.amount > 500 )
-    this.setState({ confirm: true ,error:null})
-    else 
-    this.setState({error : 'Invalid Quantity or Price'})
+    if (this.validate())  this.setState({ confirm: true, error: null })
   }
   close = () => this.setState({ confirm: false })
   placeOrder = () => {
@@ -38,6 +42,10 @@ class OrderPage extends Component {
   }
   componentDidMount() {
     this.getStubbles()
+  }
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    console.log('Updated',prevProps, prevState, snapshot,this.state)
+    
   }
   getStubbles = async () => {
     const { id } = this.props.match.params
@@ -121,18 +129,21 @@ class OrderPage extends Component {
               label
               style={buttons}
               placeholder="Enter Price"
+              type='number'
               onChange={(e) => {
+                const value = Number.parseFloat(e.target.value || '1')
                 this.setState({
-                  amount: e.target.value,
-                  qty: e.target.value / this.state.stubble?.price,
+                  error: null,
+                  amount: value,
+                  qty: value/ this.state.stubble?.price,
                 })
-                console.log(this.state.qty)
               }}
               value={this.state.amount}
               error={this.state.amount < 100 ? true : false}
+              defaultValue={1}
             >
               <Label color="teal">Price</Label>
-              <input />
+              <input type="number"/>
             </Input>
 
             <Input
@@ -141,11 +152,15 @@ class OrderPage extends Component {
               placeholder="Enter Weight"
               value={this.state.qty}
               onChange={(e) => {
-                this.setState({
-                  qty: e.target.value,
-                  total: e.target.value * this.state.stubble?.price,
-                  amount: e.target.value * this.state.stubble?.price,
-                })
+                  const value = Number.parseFloat(e.target.value ?? '1')
+                  console.log(value)
+                  this.setState({
+                    error: null,
+                    qty: value,
+                    total: value * this.state.stubble?.price,
+                    amount: value * this.state.stubble?.price,
+                  })
+                
               }}
               error={this.state.qty < 10 ? true : false}
             >
@@ -159,7 +174,9 @@ class OrderPage extends Component {
               onConfirm={this.placeOrder}
             />
           </div>
-          {this.state.error?<Message negative>{this.state.error}</Message>:null}
+          {this.state.error ? (
+            <Message negative>{this.state.error}</Message>
+          ) : null}
         </Segment>
       </Container>
     )
