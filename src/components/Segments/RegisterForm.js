@@ -41,7 +41,7 @@ export default class RegisterForm extends Component {
     return (
       <Grid
         textAlign="center"
-        style={{ height: '100vh' }}
+        style={{ height: '80vh' }}
         verticalAlign="middle"
       >
         <Grid.Column style={{ maxWidth: 450 }}>

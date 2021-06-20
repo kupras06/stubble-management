@@ -15,8 +15,10 @@ import NavBar from './components/NavBar'
 import LoginForm from './components/Segments/LoginForm'
 import RegisterForm from './components/Segments/RegisterForm'
 import StubbleList from './pages/StubbleList'
-import { logout } from './utils/auth'
+import FarmForm from './pages/FarmForm'
+import { isAuthenticated, logout } from './utils/auth'
 import { verifyRole } from './utils/auth'
+import UserPage from './pages/UserPage'
 export default function Routes(props) {
   return (
     <ProvideAuth>
@@ -45,7 +47,16 @@ export default function Routes(props) {
                 verifyRole('BUYER') ? (
                   <StubbleList {...props} />
                 ) : (
-                  <Redirect to="/login"></Redirect>
+                  <Redirect
+                    to={{
+                      pathname: '/login',
+                      state: {
+                        message:
+                          'You need to Login With your Buyer Account First',
+                        to: '/stubbles',
+                      },
+                    }}
+                  ></Redirect>
                 )
               }
             />
@@ -53,7 +64,29 @@ export default function Routes(props) {
             <Route path="/stubble/:id" exact>
               <OrderPage />
             </Route>
-
+            <Router
+              path="/add-stubble"
+              exact
+              {...props}
+              render={(props) =>
+                verifyRole('FARMER') ? (
+                  <FarmForm {...props} />
+                ) : (
+                  <Redirect
+                    to={{
+                      pathname: '/login',
+                      state: {
+                        message:
+                          'You need to Login With your Farmer Account First',
+                      },
+                    }}
+                  />
+                )
+              }
+            />
+            <Router path="/user" exact>
+              <UserPage />
+            </Router>
             <Route path="/logout" render={() => logout()} exact />
 
             <Route path="*">

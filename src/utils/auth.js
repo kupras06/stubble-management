@@ -42,6 +42,10 @@ export const signup = async ({first_name,last_name, email, password },role) => {
   console.log(data)
   return data
 }
+
+
+
+
 export const login = async ({email, password }) => {
   // Assert email or password is not empty
   console.log('in login')
@@ -77,7 +81,7 @@ export const login = async ({email, password }) => {
 
   if ('access_token' in data) {
     const decodedToken = decodeJwt(data['access_token'])
-    localStorage.setItem('token', data['access_token'])
+    localStorage.setItem('token', data['access_token'],decodedToken)
     localStorage.setItem('auth',true)
     getCurrentUser()
   } 
@@ -85,7 +89,6 @@ export const login = async ({email, password }) => {
 
   return data
 }
-
 
 export const isAuthenticated = () => {
   const auth = localStorage.getItem('auth')
@@ -113,7 +116,7 @@ export const getCurrentUser = async () => {
   console.log(data);
     const { ROLE } = data
     console.log(`role`, ROLE)
-    localStorage.setItem('role', ROLE.toUpperCase())
+    localStorage.setItem('role', ROLE?.toUpperCase())
   return data;
 };
 
@@ -121,6 +124,6 @@ export const getCurrentUser = async () => {
 export const verifyRole = (verifyRole) => {
   const auth = localStorage.getItem('auth')
   const role = localStorage.getItem('role')
-  console.log(role,verifyRole)
+  console.log(role,verifyRole,auth)
   return auth ? role==verifyRole ? true : false : false
 }
