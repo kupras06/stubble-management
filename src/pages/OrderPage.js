@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 import {
   Grid,
-  Image,
   Button,
-  Card,
   Container,
   Divider,
   Placeholder,
@@ -12,47 +10,75 @@ import {
   Input,
   Segment,
   ItemExtra,
-  TextArea,
-  Header,
+  Dimmer,
+  Loader,
   Confirm,
   Message,
 } from 'semantic-ui-react'
-import { Link } from 'react-router-dom'
 import { API_URL } from '../config'
 import { withRouter } from 'react-router-dom'
+import { getCurrentUser } from '../utils/auth'
+import axios from 'axios'
 
 class OrderPage extends Component {
-  state = { loading: true, stubble: {}, qty: 1, amount: 1, confirm: false,error:null }
-  constructor(props) {
-    super(props)
+  state = {
+    loading: true,
+    stubble: {},
+    qty: 1,
+    amount: 1,
+    confirm: false,
+    error: null,
+    user: null,
   }
   validate = () => {
-    if (isNaN(this.state.qty) || isNaN(this.state.amount) ){
+    if (isNaN(this.state.qty) || isNaN(this.state.amount)) {
       // console.log('in NAN')
-      this.setState({ qty : 1,amount:this.state.stubble.price})
+      this.setState({ qty: 1, amount: this.state.stubble.price })
     }
-    if ((this.state.qty > this.state.stubble.quantity || this.state.qty < 0 || this.state.amount < 0) && !this.state.error){
+    if (
+      (this.state.qty > this.state.stubble.quantity ||
+        this.state.qty < 0 ||
+        this.state.amount < 0) &&
+      !this.state.error
+    ) {
       // console.log('in if')
-      this.setState({ error: 'Invalid Quantity or Price'})
-    }
-   
-    else return true
+      this.setState({ error: 'Invalid Quantity or Price' })
+    } else return true
   }
   open = () => {
-    if (this.validate())  this.setState({ confirm: true, error: null })
+    if (this.validate()) this.setState({ confirm: true, error: null })
   }
   close = () => this.setState({ confirm: false })
-  placeOrder = () => {
-    // console.log('confirmed')
+
+  placeOrder = async () => {
+    console.log('confirmed', this.state)
+    this.setState({ confirm: false, pageLoading: true })
+    const orderData = {
+      user_id: this.state.user._id,
+      stubble_id: this.state.stubble._id,
+      quantity: this.state.qty,
+      amount : this.state.amount
+    }
+    const token = localStorage.getItem('token')
+    console.log(orderData)
+    axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+
+    const data = await axios
+      .post(`${API_URL}users/order`, orderData)
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((e) => console.log('err', e))
+
+    this.setState({ pageLoading: false })
   }
   componentDidMount() {
-    this.getStubbles()
+    this.fetchDetails()
   }
   componentDidUpdate(prevProps, prevState, snapshot) {
-    // console.log('Updated',prevProps, prevState, snapshot,this.state)
     this.validate()
   }
-  getStubbles = async () => {
+  fetchDetails = async () => {
     const { id } = this.props.match.params
     // console.log(id)
     const token = localStorage.getItem('token')
@@ -72,8 +98,8 @@ class OrderPage extends Component {
     const response = await fetch(request)
 
     const data = await response.json()
-    // console.log(data)
-    this.setState({ stubble: data, loading: false, amount: data.price })
+    const user = await getCurrentUser()
+    this.setState({ stubble: data, loading: false, amount: data.price, user })
   }
 
   render() {
@@ -84,6 +110,11 @@ class OrderPage extends Component {
 
     return (
       <Container>
+        {this.state.pageLoading ? (
+          <Dimmer active>
+            <Loader>Loading</Loader>
+          </Dimmer>
+        ) : null}
         <Segment>
           <Grid columns={2} relaxed="very">
             <Grid.Column>
@@ -107,7 +138,7 @@ class OrderPage extends Component {
                   </Placeholder.Paragraph>
                 </Placeholder>
               ) : (
-                <Item.Content centered>
+                <Item.Content>
                   <Item.Header as="h1">{this.state.stubble?.name}</Item.Header>
                   <Item.Meta>
                     <span> Type : {this.state.stubble?.type}</span>
@@ -134,21 +165,22 @@ class OrderPage extends Component {
               label
               style={buttons}
               placeholder="Enter Price"
-              type='number'
+              type="number"
               onChange={(e) => {
                 const value = Number.parseFloat(e.target.value || '1')
                 this.setState({
                   error: null,
                   amount: value,
-                  qty: value/ this.state.stubble?.price,
+                  qty: value / this.state.stubble?.price,
                 })
               }}
               value={this.state.amount}
-              error={this.state.amount < this.state.stubble.price ? true : false}
-              defaultValue={1}
+              error={
+                this.state.amount < this.state.stubble.price ? true : false
+              }
             >
               <Label color="teal">Price</Label>
-              <input type="number"/>
+              <input type="number" />
             </Input>
 
             <Input
@@ -157,15 +189,14 @@ class OrderPage extends Component {
               placeholder="Enter Weight"
               value={this.state.qty}
               onChange={(e) => {
-                  const value = Number.parseFloat(e.target.value ?? '1')
-                  // console.log(value)
-                  this.setState({
-                    error: null,
-                    qty: value,
-                    total: value * this.state.stubble?.price,
-                    amount: value * this.state.stubble?.price,
-                  })
-                
+                const value = Number.parseFloat(e.target.value ?? '1')
+                // console.log(value)
+                this.setState({
+                  error: null,
+                  qty: value,
+                  total: value * this.state.stubble?.price,
+                  amount: value * this.state.stubble?.price,
+                })
               }}
               error={this.state.qty < 1 ? true : false}
             >
@@ -181,7 +212,9 @@ class OrderPage extends Component {
           </div>
           {this.state.error ? (
             <Message negative>{this.state.error}</Message>
-          ) : <Message info>Note : Minimum Value are Displayed initially</Message>}
+          ) : (
+            <Message info>Note : Minimum Value are Displayed initially</Message>
+          )}
         </Segment>
       </Container>
     )

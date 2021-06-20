@@ -3,14 +3,10 @@ import { Link } from 'react-router-dom'
 import {
   Divider,
   Grid,
-  Image,
   Segment,
   Header,
-  Icon,
   Button,
-  Search,
 } from 'semantic-ui-react'
-import UserTypeSegment from '../Segments/UserTypeSegment'
 export default class HomePageLayout extends Component {
   render() {
     return (
@@ -19,7 +15,7 @@ export default class HomePageLayout extends Component {
           <Grid columns={2} stackable textAlign="center">
             <Grid.Row verticalAlign="middle">
               <Grid.Column>
-                <Header inverted text>
+                <Header inverted>
                   Are an agriculturist or have acces to a lot of stubble,, then
                   go on explore the possibilites
                 </Header>
@@ -32,7 +28,7 @@ export default class HomePageLayout extends Component {
               </Divider>
              
               <Grid.Column>
-                <Header inverted text>
+                <Header inverted >
                   Are you in need of stubble, then sign up now and explore the
                   available resources or checkout as guest
                 </Header>

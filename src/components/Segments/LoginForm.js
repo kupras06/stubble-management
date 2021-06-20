@@ -1,16 +1,15 @@
 import React, { Component } from 'react'
-import { Link, Redirect } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import {
   Button,
   Form,
   Grid,
   Header,
-  Image,
   Message,
   Modal,
   Segment,
 } from 'semantic-ui-react'
-import { isAuthenticated, login, logout } from '../../utils/auth'
+import { isAuthenticated, login } from '../../utils/auth'
 import { withRouter } from 'react-router'
 class LoginForm extends Component {
   constructor(props) {

@@ -3,7 +3,6 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
   Redirect,
   useHistory,
   useLocation,
@@ -16,7 +15,7 @@ import LoginForm from './components/Segments/LoginForm'
 import RegisterForm from './components/Segments/RegisterForm'
 import StubbleList from './pages/StubbleList'
 import FarmForm from './pages/FarmForm'
-import { isAuthenticated, logout } from './utils/auth'
+import { logout } from './utils/auth'
 import { verifyRole } from './utils/auth'
 import UserPage from './pages/UserPage'
 export default function Routes(props) {

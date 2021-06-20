@@ -1,9 +1,28 @@
 import React, { Component } from 'react'
-import { Redirect, withRouter } from 'react-router-dom'
-import { getCurrentUser, isAuthenticated } from '../utils/auth'
+import {  withRouter } from 'react-router-dom'
+import { getCurrentUser, isAuthenticated, verifyRole } from '../utils/auth'
 import './user.css'
-import { Container, Grid, Image, Divider } from 'semantic-ui-react'
+import { Container, Grid, Image, Divider, Tab } from 'semantic-ui-react'
+import LoginForm from '../components/Segments/LoginForm'
+import BookingsTable from '../components/Segments/BookingsTable'
+const panes = [
+  {
+    menuItem: 'Edit Profile',
+    render: () => <Tab.Pane>Tab 1 Content</Tab.Pane>,
+  },
+  {
+    menuItem: verifyRole('FARMER') ? 'Stubbles' : 'Bookings',
+    render: () => (
+      <div>
+        <Tab.Pane>
+          <BookingsTable />
+        </Tab.Pane>
+      </div>
+    ),
+  },
+]
 
+const TabExampleBasic = () => <Tab panes={panes} />
 class UserPage extends Component {
   componentDidMount() {
     //   this.getUserDetials()
@@ -17,59 +36,33 @@ class UserPage extends Component {
     console.log('Called')
     if (!isAuthenticated()) {
       console.log('in if', this.props.history)
-      this.props.history.go('/login')
-      return <Redirect to="/login" />
+      return <LoginForm />
     }
+    console.log('in logihfhfh')
     return (
       <Container className="main-body">
         <div className="row gutters-sm">
           <div className="col-md-4 mb-3">
-            <div className="card" style={{ padding: '1em' }}>
-              <Grid>
-                <Divider vertical />
-                <Grid.Column mobile={16} tablet={8} computer={8}>
+            <Grid>
+              <Grid.Column mobile={16} tablet={8} computer={5}>
+                <div className="card" style={{ padding: '1em' }}>
                   <Image
                     src="https://bootdey.com/img/Content/avatar/avatar7.png"
                     alt="Admin"
                     className="rounded-circle"
                   />
-                </Grid.Column>
-
-                <Grid.Column
-                  mobile={16}
-                  tablet={8}
-                  computer={8}
-                  verticalAlign="middle"
-                >
-                  <div className="mt-3 text-center">
-                    <h4>John Doe</h4>
-                    <p className="text-secondary mb-1">Full Stack Developer</p>
-                    <p className="text-muted font-size-sm">
-                      Bay Area, San Francisco, CA
-                    </p>
-                    <button className="btn btn-primary">Follow</button>
-                    <button className="btn btn-outline-primary">Message</button>
-                  </div>
-                </Grid.Column>
-              </Grid>
-            </div>
-
-            <div className="card-body">
-              <div className="d-flex flex-column align-items-center text-center"></div>
-            </div>
-          </div>
-          <div className="card mt-3" style={{ padding: '1em' }}>
-            <div className="card-body">
-              <Grid>
-                <Divider />
-                <Grid.Column mobile={16} tablet={8} computer={4}>
+                  <Divider />
                   <h1>User Details</h1>
-                </Grid.Column>
-                <Grid.Column mobile={16} tablet={8} computer={12}>
-                  <h1>User Bookings or Stubbles</h1>
-                </Grid.Column>
-              </Grid>
-            </div>
+                </div>
+              </Grid.Column>
+
+              <Grid.Column mobile={16} tablet={8} computer={11}>
+                <div className="card" style={{ padding: '1em' }}>
+                  <h1>Other Details</h1>
+                  <TabExampleBasic />
+                </div>
+              </Grid.Column>
+            </Grid>
           </div>
         </div>
       </Container>

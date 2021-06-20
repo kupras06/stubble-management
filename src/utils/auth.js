@@ -125,5 +125,5 @@ export const verifyRole = (verifyRole) => {
   const auth = localStorage.getItem('auth')
   const role = localStorage.getItem('role')
   console.log(role,verifyRole,auth)
-  return auth ? role==verifyRole ? true : false : false
+  return auth ? role===verifyRole ? true : false : false
 }

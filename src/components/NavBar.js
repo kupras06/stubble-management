@@ -41,14 +41,13 @@ export default class MenuExampleInverted extends Component {
           />
           {isAuthenticated ? (
             <Menu.Item
-            as={Link}
-            icon="sign-in"
-            to="/login"
-            name="log-in"
-            active={activeItem === 'log-in'}
-            onClick={this.handleItemClick}
-          />
-           
+              as={Link}
+              icon="sign-in"
+              to="/login"
+              name="log-in"
+              active={activeItem === 'log-in'}
+              onClick={this.handleItemClick}
+            />
           ) : (
             <Menu.Item
               as={Link}
@@ -56,21 +55,22 @@ export default class MenuExampleInverted extends Component {
               to="/"
               name="log-out"
               onClick={logout}
-            /> 
-          )}<Menu.Item
-          as={Link}
-          icon="sign-out"
-          to="/"
-          name="log-out"
-          onClick={logout}
-        /> 
-        <Menu.Item
-          as={Link}
-          to="/user"
-          name="user"
-          active={activeItem === 'user'}
-          onClick={this.handleItemClick}
-        /> 
+            />
+          )}
+          <Menu.Item
+            as={Link}
+            icon="sign-out"
+            to="/"
+            name="log-out"
+            onClick={logout}
+          />
+          <Menu.Item
+            as={Link}
+            to="/user"
+            name="user"
+            active={activeItem === 'user'}
+            onClick={this.handleItemClick}
+          />
         </Container>
       </Menu>
     )
