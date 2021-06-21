@@ -84,6 +84,7 @@ export const login = async ({email, password }) => {
     console.log(decodedToken)
     localStorage.setItem('token',data['access_token'])
     localStorage.setItem('auth',true)
+    localStorage.setItem('exp',new Date().getTime()+decodedToken.exp)
     getCurrentUser()
   } 
   console.log(data)
@@ -93,6 +94,13 @@ export const login = async ({email, password }) => {
 
 export const isAuthenticated = () => {
   const auth = localStorage.getItem('auth')
+  const time = new Date().getTime()
+  const TokenExp = localStorage.getItem('exp')
+ 
+  if (TokenExp<=time){
+    localStorage.removeItem('auth')
+    return false
+  }
   console.log('auth', auth)
   return auth ? true : false
 };

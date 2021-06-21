@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import FarmForm from '../../pages/FarmForm'
 import { Tab } from 'semantic-ui-react'
-
+import FarmerStubble from './FarmerStubble'
 const panes = [
     {
       menuItem: 'Edit Profile',
@@ -11,7 +11,7 @@ const panes = [
       menuItem: 'Stubbles',
       render: () => (
         <Tab.Pane>
-            FETCHING STUBBLES LIST
+            <FarmerStubble />
         </Tab.Pane>
       ),
     },{
