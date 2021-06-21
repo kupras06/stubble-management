@@ -81,7 +81,8 @@ export const login = async ({email, password }) => {
 
   if ('access_token' in data) {
     const decodedToken = decodeJwt(data['access_token'])
-    localStorage.setItem('token', data['access_token'],decodedToken)
+    console.log(decodedToken)
+    localStorage.setItem('token',data['access_token'])
     localStorage.setItem('auth',true)
     getCurrentUser()
   } 
@@ -104,6 +105,7 @@ export const logout = () => {
 
 export const getCurrentUser = async () => {
   const token = localStorage.getItem("token");
+  console.log(token)
   const request = new Request(API_URL + "users/me", {
     method: "GET",
     headers: {

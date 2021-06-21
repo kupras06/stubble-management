@@ -14,8 +14,6 @@ import { withRouter } from 'react-router'
 class LoginForm extends Component {
   constructor(props) {
     super(props)
-    console.log(props.location)
-
     this.state = {
       formData: {},
       login: false,

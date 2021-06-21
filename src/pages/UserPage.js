@@ -1,36 +1,26 @@
 import React, { Component } from 'react'
-import {  withRouter } from 'react-router-dom'
+import {  withRouter,Link, Redirect } from 'react-router-dom'
 import { getCurrentUser, isAuthenticated, verifyRole } from '../utils/auth'
 import './user.css'
-import { Container, Grid, Image, Divider, Tab } from 'semantic-ui-react'
+import { Container, Grid, Image, Divider, Tab,Button } from 'semantic-ui-react'
 import LoginForm from '../components/Segments/LoginForm'
 import BookingsTable from '../components/Segments/BookingsTable'
-const panes = [
-  {
-    menuItem: 'Edit Profile',
-    render: () => <Tab.Pane>Tab 1 Content</Tab.Pane>,
-  },
-  {
-    menuItem: verifyRole('FARMER') ? 'Stubbles' : 'Bookings',
-    render: () => (
-      <div>
-        <Tab.Pane>
-          <BookingsTable />
-        </Tab.Pane>
-      </div>
-    ),
-  },
-]
+import FarmForm from './FarmForm'
+import FarmerUser from '../components/Segments/FarmerUser'
+import BuyerUser from '../components/Segments/BuyerUser'
 
-const TabExampleBasic = () => <Tab panes={panes} />
+
 class UserPage extends Component {
+  state = {
+    user:null
+  }
   componentDidMount() {
-    //   this.getUserDetials()
+      this.getUserDetials()
     console.log('called', isAuthenticated())
   }
   getUserDetials = async () => {
     const user = await getCurrentUser()
-    console.log(user)
+    this.setState({user})
   }
   render() {
     console.log('Called')
@@ -53,13 +43,15 @@ class UserPage extends Component {
                   />
                   <Divider />
                   <h1>User Details</h1>
+                  <h5>Account Type : {this.state.user?.ROLE}</h5>
+                  {this.state.user?.ROLE=='FARMER' ? <Button onClick={() => <FarmForm />} >Add Stubble</Button> : null}
                 </div>
               </Grid.Column>
 
               <Grid.Column mobile={16} tablet={8} computer={11}>
                 <div className="card" style={{ padding: '1em' }}>
                   <h1>Other Details</h1>
-                  <TabExampleBasic />
+                  {this.state.user?.ROLE=='FARMER'?<FarmerUser user_id={this.state.user.user_id}/> : this.state.user?.ROLE=='BUYER'?<BuyerUser />:<h1>WHO ARE YOU?</h1>}
                 </div>
               </Grid.Column>
             </Grid>
