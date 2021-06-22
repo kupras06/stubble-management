@@ -69,7 +69,7 @@ async def upload_image(
     temp_file = await file.read()
     im = Image.open(BytesIO(temp_file))
     print(im.size)
-    im = im.resize((400,600))
+    im = im.resize((320,400))
     im.save(img_io,'PNG')
     im = img_io.getvalue()
     res = cloudinary.uploader.upload(im,
