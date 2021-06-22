@@ -64,15 +64,6 @@ export default class FarmForm extends Component {
         this.setState({ loading: false })
       })
       const url = await response.json()
-      // console.log(response)
-      // const url = await axios
-      //   .post(`${API_URL}stubble/upload`, formData, headers)
-      //   .catch((err) =>
-      //     this.setState({
-      //       error: 'Image Could Not Be Uploaded',
-      //       loading: false,
-      //     })
-      //   )
       console.log(url)
       let data1 = '';
       if (url) {
@@ -97,15 +88,6 @@ export default class FarmForm extends Component {
           console.log(err)
           this.setState({ loading: false })
         })
-        // await axios
-        //   .post(`${API_URL}stubble/`, (JSON.stringify(body1)), headers).then(res => this.setState({data:res}))
-        //   .catch((err) => {
-        //     this.setState({
-        //       error: 'Stubble Could Not Be Added',
-        //       loading: false,
-        //     })
-        //     console.log(err.message)
-        //   })
       }
       this.setState({ name: '', type: '', price: '', quantity: '', file: null })
       console.log('response data', this.state.data)
@@ -114,7 +96,6 @@ export default class FarmForm extends Component {
     this.setState({ loading: false })
   }
   render() {
-    // console.log('called Farn', this.state.file)
     return (
       <>
         <Form onSubmit={this.formSubmit} loading={this.state.loading}>

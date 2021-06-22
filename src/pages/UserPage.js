@@ -59,7 +59,7 @@ class UserPage extends Component {
                     {user ?(<>
                     {Object.keys(user).map((key,idx)=> {
                       if(key!='_id' && user[key] && key!='hashed_password' && key!='is_superuser' && key!='is_active')
-                      return <List.Item>
+                      return <List.Item key={idx}>
                       <List.Header>{key.toUpperCase().replace('_',' ')} :</List.Header>{user[key]}
                     </List.Item>
                     })}                      
@@ -87,9 +87,9 @@ class UserPage extends Component {
                   <div className="card" style={{ padding: '1em' }}>
                     <h1>Other Details</h1>
                     {this.state.user?.ROLE == 'FARMER' ? (
-                      <FarmerUser user_id={this.state.user.user_id} />
+                      <FarmerUser user={this.state.user} refreshUser={this.getUserDetials}/>
                     ) : this.state.user?.ROLE == 'BUYER' ? (
-                      <BuyerUser />
+                      <BuyerUser user={this.state.user} refreshUser={this.getUserDetials}/>
                     ) : (
                       <>
                         <h4>Fetching...</h4>
