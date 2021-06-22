@@ -1,5 +1,5 @@
 amqp==5.0.6
-bcrypt==3.2.0
+bcrypt==3.2.0    
 billiard==3.6.4.0
 cachetools==4.2.2
 celery==5.0.5
@@ -10,6 +10,7 @@ click==7.1.2
 click-didyoumean==0.0.3
 click-plugins==1.1.1
 click-repl==0.1.6
+cloudinary==1.26.0
 cssselect==1.1.0
 cssutils==2.2.0
 dnspython==2.1.0
@@ -24,6 +25,7 @@ kombu==5.0.2
 lxml==4.6.3
 motor==2.4.0
 passlib==1.7.4
+Pillow==8.2.0
 premailer==3.8.0
 prompt-toolkit==3.0.18
 pyasn1==0.4.8
@@ -45,4 +47,3 @@ uvicorn==0.13.4
 vine==5.0.0
 wcwidth==0.2.5
 zipp==3.4.1
-cloudinary
