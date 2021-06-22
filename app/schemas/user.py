@@ -79,6 +79,17 @@ class UserLogin (BaseModel):
 
 
 # Properties to receive via API on update
-class UserUpdate(UserBaseIn):
-    password: Optional[str] = None
+class UserUpdate(BaseModel):
+    first_name : str 
+    last_name : str 
+    email: EmailStr
+    address : Optional[str]
+    city : Optional[str]
+    pin_code : Optional[int]
+    state  : Optional[str]
+    country : Optional[str]
+    phone_number : Optional[str]
    
+class UserUpdatePassWord(BaseModel):
+    old_password : str
+    new_password : str

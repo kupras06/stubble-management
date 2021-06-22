@@ -1,5 +1,7 @@
 
-from app.schemas import transaction
+from pprint import pprint
+from app.core.security import get_password_hash,verify_password
+from app.schemas import transaction, user
 from app.core.messages import message
 from typing import Any, List
 from app.helpers import mongo_helper
@@ -70,6 +72,29 @@ async def update_user_me(
     return user
 
 
+@router.put("/password/me")
+async def update_user_me(
+    *,
+    db: Any = Depends(get_user_db),
+    user_in : schemas.user.UserUpdatePassWord,
+    current_user: schemas.user.UserBase = Depends(deps.get_current_active_user),
+) -> Any:
+    """
+    Update own user.
+    """
+    hashed_password = get_password_hash(user_in.old_password)
+    print(hashed_password,'\n',current_user.hashed_password)
+    if not verify_password(user_in.old_password,current_user.hashed_password):
+        raise HTTPException(
+            status_code=400,
+            detail="The Old password did not match",
+        )
+    data = {}
+    data['hashed_password'] = get_password_hash(user_in.new_password)
+    await db.update_one({'_id':current_user.id},{'$set' : {**data}})
+    user = db.find_one({'_id':current_user.id})
+    return {'message':'Success'}
+
 @router.get("/me", response_model=schemas.user.UserModel)
 def read_user_me(
     db: Any = Depends(get_user_db),
@@ -90,12 +115,6 @@ async def create_user_open(
     """
     Create new user without the need to be logged in.
     """
-    print(f'email : {user.email}, password {user.password}')
-    # if not settings.USERS_OPEN_REGISTRATION:
-    #     raise HTTPException(
-    #         status_code=403,
-    #         detail="Open user registration is forbidden on this server",
-    #     )
     userExist = await crud.user.get_by_email(db, email=user.email)
     if userExist:
         raise HTTPException(
@@ -147,7 +166,6 @@ async def update_user(
     message.Json(user,'UPDATE BY ID')
     user = await crud.user.update(db, db_obj=schemas.user.UserModel(**user), obj_in=user_in)
     return user
-
 
 import uuid
 @router.post("/order" , tags=['Transactions']) #response_model=schemas.TransactionModel)
