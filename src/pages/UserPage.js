@@ -15,30 +15,27 @@ import {
 import LoginForm from '../components/Segments/LoginForm'
 import FarmerUser from '../components/Segments/FarmerUser'
 import BuyerUser from '../components/Segments/BuyerUser'
+import UserContext from '../UserContext'
 
 class UserPage extends Component {
+  static contextType = UserContext
   state = {
     user: null,
   }
   componentDidMount() {
-    this.getUserDetials()
-    console.log('called', isAuthenticated())
-  }
-  getUserDetials = async () => {
-    const user = await getCurrentUser()
-    this.setState({ user })
-  }
-  render() {
-    console.log('Called')
-    if (!isAuthenticated()) {
-      console.log('in if', this.props.history)
+    const { auth,user,setUser } = this.context
+    if (!auth) {
       return <LoginForm />
     }
-    const { user } = this.state
+    else if (auth && !user)
+      setUser()
+  }
+  
+  render() {
+    const { user } = this.context
     return (
       <>
-        {' '}
-        {!this.state.user ? (
+        {!user ? (
           <Dimmer>
             <Loader>Getting Your Details</Loader>
           </Dimmer>
@@ -50,8 +47,8 @@ class UserPage extends Component {
                 <Grid.Column mobile={16} tablet={8} computer={5}>
                   <div className="card" style={{ padding: '1em' }}>
                     <Image
-                      src="https://bootdey.com/img/Content/avatar/avatar7.png"
-                      alt="Admin"
+                      src={user?.image_url ?? 'https://bootdey.com/img/Content/avatar/avatar7.png'}
+                      alt={user?.ROLE}
                       className="rounded-circle"
                     />
                     <Divider />
@@ -85,11 +82,11 @@ class UserPage extends Component {
 
                 <Grid.Column mobile={16} tablet={8} computer={11}>
                   <div className="card" style={{ padding: '1em' }}>
-                    <h1>Other Details</h1>
-                    {this.state.user?.ROLE == 'FARMER' ? (
-                      <FarmerUser user={this.state.user} refreshUser={this.getUserDetials}/>
-                    ) : this.state.user?.ROLE == 'BUYER' ? (
-                      <BuyerUser user={this.state.user} refreshUser={this.getUserDetials}/>
+                    <h1>User Details</h1>
+                    {user?.ROLE == 'FARMER' ? (
+                      <FarmerUser user={user} />
+                    ) : user?.ROLE == 'BUYER' ? (
+                      <BuyerUser user={user} />
                     ) : (
                       <>
                         <h4>Fetching...</h4>

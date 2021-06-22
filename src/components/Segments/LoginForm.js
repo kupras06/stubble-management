@@ -11,14 +11,18 @@ import {
 } from 'semantic-ui-react'
 import { isAuthenticated, login } from '../../utils/auth'
 import { withRouter } from 'react-router'
+import UserContext from '../../UserContext'
 class LoginForm extends Component {
+  static contextType = UserContext
   constructor(props) {
     super(props)
     this.state = {
+      loading: false,
       formData: {},
       login: false,
       isMessage: props.location.state?.message ? true : false,
       message: props.location.state?.message || null,
+      error: null,
     }
   }
 
@@ -34,23 +38,27 @@ class LoginForm extends Component {
     return true
   }
   handleFormSubmit = async (e) => {
+    const { setAuth, setUser } = this.context
     e.preventDefault()
+    this.setState({ loading: true })
     console.log(this.state.formData)
-    if (this.validate()) {
-      const user = await login(this.state.formData)
-      if (isAuthenticated()) this.setState({ login: true })  
-      console.log('logged in now',this.props.location,user)
-    }
-    
-    console.log(this.props)
+    if (this.validate())
+      await login(this.state.formData)
+        .then((res) => {
+          setAuth(true)
+          setUser()
+        })
+        .catch((err) => {
+          console.log(err)
+          this.setState({ error: err, loading: false })
+        })
+    this.setState({ loading: false })
   }
   render() {
-    console.log('logged in ? ',this.state.login)
-    if (this.state.login ){
+    const { auth } = this.context
+    if (auth) {
       const to = this.props.location?.state?.to || 'user'
-      console.log('logged in ? ',this.state.login)
       return <Redirect to={to} />
-      
     }
     return (
       <>
@@ -66,7 +74,11 @@ class LoginForm extends Component {
             {this.state.message ? (
               <Message info>{this.state.message}</Message>
             ) : null}
-            <Form size="large" onSubmit={this.handleFormSubmit}>
+            <Form
+              size="large"
+              onSubmit={this.handleFormSubmit}
+              loading={this.state.loading}
+            >
               <Segment stacked>
                 <Form.Input
                   fluid
@@ -95,19 +107,20 @@ class LoginForm extends Component {
                   Login
                 </button>
               </Segment>
-            </Form>
-            {/* <Message>
-            New here? <Link to="/sign-up">Sign Up</Link>
-          </Message> */}
+            </Form>{' '}
+            {this.state.error ? (
+              <Message error>{this.state.error}</Message>
+            ) : null}
           </Grid.Column>
-          
         </Grid>
         <Modal
           onClose={() => this.setState({ isMessage: false })}
           open={this.state.isMessage}
         >
           <Modal.Content>
-            <Message info>{this.state.message}</Message>
+            {this.state.message ? (
+              <Message info>{this.state.message}</Message>
+            ) : null}
           </Modal.Content>{' '}
           <Modal.Actions>
             <Button

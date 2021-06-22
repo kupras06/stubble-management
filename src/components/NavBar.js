@@ -2,15 +2,16 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { Menu, Container } from 'semantic-ui-react'
 import { isAuthenticated, logout } from '../utils/auth'
-
+import UserContext from '../UserContext'
 export default class MenuExampleInverted extends Component {
+  static contextType = UserContext
   state = { activeItem: 'home' }
 
   handleItemClick = (e, { name }) => this.setState({ activeItem: name })
-
   render() {
+    const { setAuth, auth } = this.context
     const { activeItem } = this.state
-
+    console.log(auth)
     return (
       <Menu inverted>
         <Container>
@@ -39,7 +40,7 @@ export default class MenuExampleInverted extends Component {
             active={activeItem === 'stubbles'}
             onClick={this.handleItemClick}
           />
-          {isAuthenticated ? (
+          {!auth ? (
             <Menu.Item
               as={Link}
               icon="sign-in"
@@ -49,28 +50,25 @@ export default class MenuExampleInverted extends Component {
               onClick={this.handleItemClick}
             />
           ) : (
-            <Menu.Item
-              as={Link}
-              icon="sign-out"
-              to="/"
-              name="log-out"
-              onClick={logout}
-            />
+            <>
+              <Menu.Item
+                as={Link}
+                to="/user"
+                name="user"
+                active={activeItem === 'user'}
+              />
+              <Menu.Item
+                as={Link}
+                icon="sign-out"
+                to="/"
+                name="log-out"
+                onClick={() => {
+                  setAuth(false)
+                  logout()
+                }}
+              />
+            </>
           )}
-          <Menu.Item
-            as={Link}
-            icon="sign-out"
-            to="/"
-            name="log-out"
-            onClick={logout}
-          />
-          <Menu.Item
-            as={Link}
-            to="/user"
-            name="user"
-            active={activeItem === 'user'}
-            onClick={this.handleItemClick}
-          />
         </Container>
       </Menu>
     )

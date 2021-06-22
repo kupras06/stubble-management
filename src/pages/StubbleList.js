@@ -13,7 +13,7 @@ import { API_URL } from '../config'
 export default class StubbleList extends Component {
   constructor(props) {
     super(props)
-    this.state = { loading: true, stubbles: [{}, {}, {}] }
+    this.state = { loading: true, stubbles: [{_id:1}, {_id:2}, {_id:3}] }
   }
 
   componentDidMount() {

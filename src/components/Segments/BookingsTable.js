@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
-import { Dimmer, Loader, Placeholder } from 'semantic-ui-react'
+import { Placeholder } from 'semantic-ui-react'
 import { API_URL } from '../../config'
 import Table from '../Layouts/Table'
 export default class BookingsTable extends Component {
   state = {
     orders: null,
+    mount: true,
   }
   componentDidMount() {
     this.getBookingsDetails()
@@ -21,9 +22,11 @@ export default class BookingsTable extends Component {
 
     const data = await response.json()
     console.log(data)
-    this.setState({ orders: data })
+    if (this.state.mount) this.setState({ orders: data })
   }
-
+  componentWillUnmount() {
+    this.mount = false
+  }
   render() {
     const columns = [
       { accessor: '_id', Header: 'ID' },
@@ -34,14 +37,13 @@ export default class BookingsTable extends Component {
     return (
       <>
         {this.state.orders ? (
-          <div >
+          <div>
             <Table data={this.state.orders} columns={columns} />
           </div>
         ) : (
-            <Placeholder fluid>
-            <Placeholder.Image  />
+          <Placeholder fluid>
+            <Placeholder.Image />
           </Placeholder>
-            
         )}
       </>
     )

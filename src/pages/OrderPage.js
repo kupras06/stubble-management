@@ -19,8 +19,10 @@ import { API_URL } from '../config'
 import { withRouter } from 'react-router-dom'
 import { getCurrentUser } from '../utils/auth'
 import axios from 'axios'
+import UserContext from '../UserContext'
 
 class OrderPage extends Component {
+  static contextType = UserContext
   state = {
     loading: true,
     stubble: {},
@@ -98,7 +100,7 @@ class OrderPage extends Component {
     const response = await fetch(request)
 
     const data = await response.json()
-    const user = await getCurrentUser()
+    const { user }= this.context
     this.setState({ stubble: data, loading: false, amount: data.price, user })
   }
 

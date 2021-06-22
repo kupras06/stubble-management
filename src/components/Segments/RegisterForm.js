@@ -11,9 +11,10 @@ import { signup } from '../../utils/auth'
 export default class RegisterForm extends Component {
   state = {
     formData: {
-      ROLE : 'farmer'
+      ROLE : this.props.role
     },
     error:null,
+    loading:false
   }
   handleChange = (e,{ value}) => {
       const data = this.state.formData
@@ -29,13 +30,17 @@ export default class RegisterForm extends Component {
     }
     return true
   }
-  handleFormSubmit = (e) => {
+  handleFormSubmit = async(e) => {
     e.preventDefault()
     console.log(this.state.formData)
+    this.setState({loading:true})
+    let data
     if (this.validate())
-    signup(this.state.formData,this.props.role)
+    data = await signup(this.state.formData,this.props.role).catch(err => { console.log(err);this.setState({error:err,loading : false})})
+    this.setState({loading:false,data})
   }
   render() {
+    console.log(this.state?.data)
     return (
       <Grid
         textAlign="center"
@@ -46,7 +51,7 @@ export default class RegisterForm extends Component {
           <Header as="h2" color="teal" textAlign="center">
             WelCome, Lets Get Started!
           </Header>
-          <Form size="large" onSubmit={this.handleFormSubmit}>
+          <Form size="large" onSubmit={this.handleFormSubmit} loading={this.state.loading}>
             <Segment stacked>
             <Form.Input
                 fluid

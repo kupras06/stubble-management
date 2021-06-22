@@ -20,190 +20,78 @@ import { verifyRole } from './utils/auth'
 import UserPage from './pages/UserPage'
 export default function Routes(props) {
   return (
-    <ProvideAuth>
-      <Router>
-        <div>
-          <NavBar />
+    <Router>
+      <div>
+        <NavBar />
 
-          <Switch>
-            <Route path="/" exact>
-              <Home />
-            </Route>
-            <Route path="/login" exact>
-              <LoginForm />
-            </Route>
-            <Route path="/farmer/sign-up" exact>
-              <RegisterForm role="FARMER" />
-            </Route>
-            <Route path="/buyer/sign-up" exact>
-              <RegisterForm role="BUYER" />
-            </Route>
-            <Route
-              path="/stubbles"
-              exact
-              {...props}
-              render={(props) =>
-                verifyRole('BUYER') ? (
-                  <StubbleList {...props} />
-                ) : (
-                  <Redirect
-                    to={{
-                      pathname: '/login',
-                      state: {
-                        message:
-                          'You need to Login With your Buyer Account First',
-                        to: '/stubbles',
-                      },
-                    }}
-                  ></Redirect>
-                )
-              }
-            />
-
-            <Route path="/stubble/:id" exact>
-              <OrderPage />
-            </Route>
-            <Router
-              path="/add-stubble"
-              exact
-              {...props}
-              render={(props) =>
-                verifyRole('FARMER') ? (
-                  <FarmForm {...props} />
-                ) : (
-                  <Redirect
-                    to={{
-                      pathname: '/login',
-                      state: {
-                        message:
-                          'You need to Login With your Farmer Account First',
-                      },
-                    }}
-                  />
-                )
-              }
-            />
-            <Router path="/user" exact>
-              <UserPage />
-            </Router>
-            <Route path="/logout" render={() => logout()} exact />
-
-            <Route path="*">
-              <NoMatch />
-            </Route>
-          </Switch>
-        </div>
-      </Router>
-    </ProvideAuth>
-  )
-}
-
-const fakeAuth = {
-  isAuthenticated: false,
-  signin(cb) {
-    fakeAuth.isAuthenticated = true
-    setTimeout(cb, 100) // fake async
-  },
-  signout(cb) {
-    fakeAuth.isAuthenticated = false
-    setTimeout(cb, 100)
-  },
-}
-
-const authContext = createContext()
-
-function ProvideAuth({ children }) {
-  const auth = useProvideAuth()
-  return <authContext.Provider value={auth}>{children}</authContext.Provider>
-}
-
-function useAuth() {
-  return useContext(authContext)
-}
-
-function useProvideAuth() {
-  const [user, setUser] = useState(null)
-
-  const signin = (cb) => {
-    return fakeAuth.signin(() => {
-      setUser('user')
-      cb()
-    })
-  }
-
-  const signout = (cb) => {
-    return fakeAuth.signout(() => {
-      setUser(null)
-      cb()
-    })
-  }
-
-  return {
-    user,
-    signin,
-    signout,
-  }
-}
-
-function AuthButton() {
-  let history = useHistory()
-  let auth = useAuth()
-
-  return auth.user ? (
-    <p>
-      Welcome!{' '}
-      <button
-        onClick={() => {
-          auth.signout(() => history.push('/'))
-        }}
-      >
-        Sign out
-      </button>
-    </p>
-  ) : (
-    <p>You are not logged in.</p>
-  )
-}
-
-// A wrapper for <Route> that redirects to the login
-// screen if you're not yet authenticated.
-function PrivateRoute({ children, ...rest }) {
-  let auth = useAuth()
-  return (
-    <Route
-      {...rest}
-      render={({ location }) =>
-        auth.user ? (
-          children
-        ) : (
-          <Redirect
-            to={{
-              pathname: '/login',
-              state: { from: location },
-            }}
+        <Switch>
+          <Route path="/" exact>
+            <Home />
+          </Route>
+          <Route path="/login" exact>
+            <LoginForm />
+          </Route>
+          <Route path="/farmer/sign-up" exact>
+            <RegisterForm role="FARMER" />
+          </Route>
+          <Route path="/buyer/sign-up" exact>
+            <RegisterForm role="BUYER" />
+          </Route>
+          <Route
+            path="/stubbles"
+            exact
+            {...props}
+            render={(props) =>
+              verifyRole('BUYER') ? (
+                <StubbleList {...props} />
+              ) : (
+                <Redirect
+                  to={{
+                    pathname: '/login',
+                    state: {
+                      message:
+                        'You need to Login With your Buyer Account First',
+                      to: '/stubbles',
+                    },
+                  }}
+                ></Redirect>
+              )
+            }
           />
-        )
-      }
-    />
-  )
-}
 
-function LoginPage() {
-  let history = useHistory()
-  let location = useLocation()
-  let auth = useAuth()
+          <Route path="/stubble/:id" exact>
+            <OrderPage />
+          </Route>
+          <Router
+            path="/add-stubble"
+            exact
+            {...props}
+            render={(props) =>
+              verifyRole('FARMER') ? (
+                <FarmForm {...props} />
+              ) : (
+                <Redirect
+                  to={{
+                    pathname: '/login',
+                    state: {
+                      message:
+                        'You need to Login With your Farmer Account First',
+                    },
+                  }}
+                />
+              )
+            }
+          />
+          <Router path="/user" exact>
+            <UserPage />
+          </Router>
+          <Route path="/logout" render={() => logout()} exact />
 
-  let { from } = location.state || { from: { pathname: '/' } }
-  let login = () => {
-    auth.signin(() => {
-      history.replace(from)
-    })
-  }
-
-  return (
-    <div>
-      <p>You must log in to view the page at {from.pathname}</p>
-      <button onClick={login}>Log in</button>
-    </div>
+          <Route path="*">
+            <NoMatch />
+          </Route>
+        </Switch>
+      </div>
+    </Router>
   )
 }
