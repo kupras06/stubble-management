@@ -35,8 +35,8 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         if doc:
             response = db.find(doc).limit(limit).skip(skip)
         else:
-            response = db.find(doc).limit(limit).skip(skip) 
-        res  = []
+            response = db.find().limit(limit).skip(skip) 
+        res = []
 
         print(response)
     
