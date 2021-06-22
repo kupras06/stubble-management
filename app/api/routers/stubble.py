@@ -45,7 +45,8 @@ async def create_stubble(
     stubble = await crud.stubble.create(db, obj_in=user_in)
     return stubble
 
-
+from PIL import Image
+from io import BytesIO
 @router.post("/upload")
 async def upload_image(
     *,
@@ -63,9 +64,15 @@ async def upload_image(
     )
 
     filename = os.path.splitext(file.filename)[0]
+    img_io = BytesIO()
     
     temp_file = await file.read()
-    res = cloudinary.uploader.upload(temp_file,
+    im = Image.open(BytesIO(temp_file))
+    print(im.size)
+    im = im.resize((400,600))
+    im.save(img_io,'PNG')
+    im = img_io.getvalue()
+    res = cloudinary.uploader.upload(im,
                                      folder="/Stubbler",
                                      public_id=filename,
                                      overwrite=True,
