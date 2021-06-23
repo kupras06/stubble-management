@@ -46,7 +46,7 @@ export default class StubbleList extends Component {
           <Divider />
 
           <Card.Group doubling itemsPerRow={3} stackable>
-            {this.state.stubbles.map((stubble) => (
+            {this.state?.stubbles?.map((stubble) => (
               <Card key={stubble?._id}>
                 {loading ? (
                   <Placeholder>
