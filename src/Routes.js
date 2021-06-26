@@ -1,11 +1,9 @@
-import React, { useContext, createContext, useState } from 'react'
+import React from 'react'
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Redirect,
-  useHistory,
-  useLocation,
 } from 'react-router-dom'
 import Home from './pages/Home'
 import NoMatch from './pages/NoMatch'
@@ -18,12 +16,13 @@ import FarmForm from './pages/FarmForm'
 import { logout } from './utils/auth'
 import { verifyRole } from './utils/auth'
 import UserPage from './pages/UserPage'
+import Models from './models'
 export default function Routes(props) {
   return (
     <Router>
       <div>
         <NavBar />
-
+        <Models />
         <Switch>
           <Route path="/" exact>
             <Home />

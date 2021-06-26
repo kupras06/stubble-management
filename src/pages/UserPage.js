@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import { withRouter } from 'react-router-dom'
-import { getCurrentUser, isAuthenticated, verifyRole } from '../utils/auth'
+import { withRouter,Redirect } from 'react-router-dom'
 import './user.css'
 import {
   Container,
@@ -33,6 +32,7 @@ class UserPage extends Component {
   
   render() {
     const { user } = this.context
+    if(!user)  return <Redirect to='/' />
     return (
       <>
         {!user ? (
@@ -55,7 +55,7 @@ class UserPage extends Component {
                     <List>
                     {user ?(<>
                     {Object.keys(user).map((key,idx)=> {
-                      if(key!='_id' && user[key] && key!='hashed_password' && key!='is_superuser' && key!='is_active')
+                      if(key!=='_id' && user[key] && key!=='hashed_password' && key!=='is_superuser' && key!=='is_active')
                       return <List.Item key={idx}>
                       <List.Header>{key.toUpperCase().replace('_',' ')} :</List.Header>{user[key]}
                     </List.Item>
@@ -83,9 +83,9 @@ class UserPage extends Component {
                 <Grid.Column mobile={16} tablet={8} computer={11}>
                   <div className="card" style={{ padding: '1em' }}>
                     <h1>User Details</h1>
-                    {user?.ROLE == 'FARMER' ? (
+                    {user?.ROLE === 'FARMER' ? (
                       <FarmerUser user={user} />
-                    ) : user?.ROLE == 'BUYER' ? (
+                    ) : user?.ROLE === 'BUYER' ? (
                       <BuyerUser user={user} />
                     ) : (
                       <>

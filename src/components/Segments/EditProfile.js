@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Divider, Form, Button } from 'semantic-ui-react'
+import { Divider, Form } from 'semantic-ui-react'
 import { API_URL } from '../../config'
 import UserContext from '../../UserContext'
 export default class EditProfile extends Component {

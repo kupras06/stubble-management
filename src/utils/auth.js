@@ -9,7 +9,7 @@ export const signup = async ({
   ROLE,
 }) => {
   // Assert email or password is not empty
-  console.log('in signup')
+  // console.log('in signup')
   if (
     !(email.length > 0) ||
     !(password.length > 0) ||
@@ -37,7 +37,7 @@ export const signup = async ({
   }
 
   const data = await response.json()
-  console.log(data)
+  // console.log(data)
   if (response.status >= 400 && response.status < 500) {
     if (data.detail) {
       throw data.detail
@@ -50,13 +50,13 @@ export const signup = async ({
     localStorage.setItem('token', data['access_token'])
     localStorage.setItem('permissions', decodedToken.permissions)
   }
-  console.log(data)
+  // console.log(data)
   return data
 }
 
 export const login = async ({ email, password }) => {
   // Assert email or password is not empty
-  console.log('in login')
+  // console.log('in login')
   if (!(email.length > 0) || !(password.length > 0)) {
     throw new Error('Email or password was not provided')
   }
@@ -73,7 +73,7 @@ export const login = async ({ email, password }) => {
   const response = await fetch(request).catch((err) =>
     console.log(err.response)
   )
-  console.log(response)
+  // console.log(response)
   if (response?.status === 500) {
     throw new Error('Internal server error')
   }
@@ -88,12 +88,12 @@ export const login = async ({ email, password }) => {
 
   if ('access_token' in data) {
     const decodedToken = decodeJwt(data['access_token'])
-    console.log(decodedToken)
+    // console.log(decodedToken)
     localStorage.setItem('token', data['access_token'])
     localStorage.setItem('auth', true)
     localStorage.setItem('exp', new Date().getTime() + decodedToken.exp)
   }
-  console.log(data)
+  // console.log(data)
 
   return data
 }
@@ -107,7 +107,7 @@ export const isAuthenticated = () => {
     localStorage.removeItem('auth')
     return false
   }
-  console.log('auth', auth)
+  // console.log('auth', auth)
   return auth
 }
 
@@ -119,7 +119,7 @@ export const logout = () => {
 
 export const getCurrentUser = async () => {
   const token = localStorage.getItem('token')
-  console.log(token)
+  // console.log(token)
   const request = new Request(API_URL + 'users/me', {
     method: 'GET',
     headers: {
@@ -128,9 +128,9 @@ export const getCurrentUser = async () => {
   })
   const response = await fetch(request)
   const data = await response.json()
-  console.log(data)
+  // console.log(data)
   const { ROLE } = data
-  console.log(`role`, ROLE)
+  // console.log(`role`, ROLE)
   localStorage.setItem('role', ROLE?.toUpperCase())
   localStorage.setItem('auth', true)
 
@@ -140,6 +140,6 @@ export const getCurrentUser = async () => {
 export const verifyRole = (verifyRole) => {
   const auth = localStorage.getItem('auth')
   const role = localStorage.getItem('role')
-  console.log(role, verifyRole, auth)
+  // console.log(role, verifyRole, auth)
   return auth ? (role === verifyRole ? true : false) : false
 }

@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Button, Form, Message } from 'semantic-ui-react'
-import axios from 'axios'
 import { API_URL } from '../config'
 export default class FarmForm extends Component {
   state = {
@@ -29,10 +28,10 @@ export default class FarmForm extends Component {
   validate = () => {
     const { name, price, type, quantity } = this.state
     const errors = {}
-    if (!name || name == '') errors['name'] = 'Name is Required'
-    if (!price || price == '') errors['price'] = 'Price is Required'
-    if (!type || type == '') errors['type'] = 'Type is Required'
-    if (!quantity || quantity == '') errors['quantity'] = 'Quantity is Required'
+    if (!name || name === '') errors['name'] = 'Name is Required'
+    if (!price || price === '') errors['price'] = 'Price is Required'
+    if (!type || type === '') errors['type'] = 'Type is Required'
+    if (!quantity || quantity === '') errors['quantity'] = 'Quantity is Required'
     if (!this.state.file) errors['file'] = 'Image is Required'
     this.setState({ errors })
     return this.state.errors ? false : true
@@ -44,12 +43,6 @@ export default class FarmForm extends Component {
       const token = localStorage.getItem('token')
       var formData = new FormData()
       formData.append('file', this.state.file, this.state.file.name)
-      const headers = {
-        'Content-Type': this.state.file.type,
-        Authorization: 'Bearer ' + token,
-        'Access-Control-Allow-Methods': 'POST',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-      }
       let request = new Request(API_URL + 'stubble/upload', {
         method: 'POST',
         headers: {
@@ -65,7 +58,7 @@ export default class FarmForm extends Component {
       })
       const url = await response.json()
       console.log(url)
-      let data1 = '';
+      
       if (url) {
         const body1 = {
           name: this.state.name,
@@ -84,7 +77,7 @@ export default class FarmForm extends Component {
           },
           body:JSON.stringify(body1),
         })
-        let response = await fetch(request).catch((err) => {
+        await fetch(request).catch((err) => {
           console.log(err)
           this.setState({ loading: false })
         })

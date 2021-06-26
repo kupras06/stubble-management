@@ -58,8 +58,7 @@ export default class FarmerStubble extends Component {
                         disabled={loading}
                         primary
                         as={Link}
-                        to={`stubble/${stubble?._id}`}
-                        disabled
+                        to={`stubble/${stubble._id}`}
                       >
                         Edit
                       </Button>

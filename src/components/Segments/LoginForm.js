@@ -9,7 +9,7 @@ import {
   Modal,
   Segment,
 } from 'semantic-ui-react'
-import { isAuthenticated, login } from '../../utils/auth'
+import { login } from '../../utils/auth'
 import { withRouter } from 'react-router'
 import UserContext from '../../UserContext'
 class LoginForm extends Component {
@@ -41,7 +41,7 @@ class LoginForm extends Component {
     const { setAuth, setUser } = this.context
     e.preventDefault()
     this.setState({ loading: true })
-    console.log(this.state.formData)
+    // console.log(this.state.formData)
     if (this.validate())
       await login(this.state.formData)
         .then((res) => {
@@ -49,7 +49,7 @@ class LoginForm extends Component {
           setUser(true)
         })
         .catch((err) => {
-          console.log(err)
+          // console.log(err)
           this.setState({ error: err, loading: false })
         })
     this.setState({ loading: false })

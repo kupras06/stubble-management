@@ -17,7 +17,6 @@ import {
 } from 'semantic-ui-react'
 import { API_URL } from '../config'
 import { withRouter } from 'react-router-dom'
-import { getCurrentUser } from '../utils/auth'
 import axios from 'axios'
 import UserContext from '../UserContext'
 
@@ -65,7 +64,7 @@ class OrderPage extends Component {
     console.log(orderData)
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
 
-    const data = await axios
+    await axios
       .post(`${API_URL}users/order`, orderData)
       .then((res) => {
         console.log(res)
