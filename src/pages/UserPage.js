@@ -28,7 +28,7 @@ class UserPage extends Component {
       return <LoginForm />
     }
     else if (auth && !user)
-      setUser()
+      setUser(true)
   }
   
   render() {

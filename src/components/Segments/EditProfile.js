@@ -45,7 +45,7 @@ export default class EditProfile extends Component {
     console.log(data)
 
     this.setState({ loading: false })
-    setUser()
+    setUser(true)
   }
   componentWillUnmount() {
     this.mount = false

@@ -9,7 +9,7 @@ export default class MenuExampleInverted extends Component {
 
   handleItemClick = (e, { name }) => this.setState({ activeItem: name })
   render() {
-    const { setAuth, auth } = this.context
+    const { setAuth, auth,user ,setUser} = this.context
     const { activeItem } = this.state
     console.log(auth)
     return (
@@ -24,22 +24,14 @@ export default class MenuExampleInverted extends Component {
             active={activeItem === 'home'}
             onClick={this.handleItemClick}
           />
-
-          <Menu.Item
-            as={Link}
-            to="/about-us"
-            name="aboutUs"
-            active={activeItem === 'aboutUs'}
-            onClick={this.handleItemClick}
-          />
-
+          { user?.ROLE==='BUYER'?
           <Menu.Item
             as={Link}
             to="/stubbles"
             name="stubbles"
             active={activeItem === 'stubbles'}
             onClick={this.handleItemClick}
-          />
+          />:null}
           {!auth ? (
             <Menu.Item
               as={Link}
@@ -64,6 +56,7 @@ export default class MenuExampleInverted extends Component {
                 name="log-out"
                 onClick={() => {
                   setAuth(false)
+                  setUser(false)
                   logout()
                 }}
               />

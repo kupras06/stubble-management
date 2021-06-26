@@ -46,7 +46,7 @@ class LoginForm extends Component {
       await login(this.state.formData)
         .then((res) => {
           setAuth(true)
-          setUser()
+          setUser(true)
         })
         .catch((err) => {
           console.log(err)

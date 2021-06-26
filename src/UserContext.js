@@ -11,9 +11,12 @@ class UserProvider extends React.Component {
   setAuth = (value) => {
     this.setState({ auth: value })
   }
-  setUser = async () => {
+  setUser = async (value) => {
+    if(value){
     const user = await getCurrentUser()
     this.setState({ user })
+    }
+    else this.setState({user:null})
   }
   render() {
     const { children } = this.props
