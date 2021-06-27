@@ -103,6 +103,7 @@ def read_user_me(
     """
     Get current user.
     """
+    current_user.ROLE = current_user.ROLE.upper()
     return current_user
 
 
