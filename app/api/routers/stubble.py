@@ -29,6 +29,19 @@ async def get_all_stubble(
     return stubble
 
 
+@router.get('/mine')
+async def get_user_stubble(
+    db: Any = Depends(get_stubble_db),
+    skip: int = 0,
+    limit: int = 100,
+    current_user: schemas.user.UserBase = Depends(deps.get_current_user),
+) -> Any:
+    """
+    Retrieve Stubbles.
+    """
+    stubble = await crud.stubble.get_multi(db, doc={'owner':str(current_user.id)},skip=skip, limit=limit)
+    return stubble
+
 @router.post("/", response_model=schemas.stubble.StubbleModel)
 async def create_stubble(
     *,
