@@ -14,6 +14,8 @@ import {
   Loader,
   Confirm,
   Message,
+  Header,
+  Icon
 } from 'semantic-ui-react'
 import { API_URL } from '../config'
 import { withRouter } from 'react-router-dom'
@@ -68,6 +70,7 @@ class OrderPage extends Component {
       .post(`${API_URL}users/order`, orderData)
       .then((res) => {
         console.log(res)
+        this.setState({orderSuccess:true})
       })
       .catch((e) => console.log('err', e))
 
@@ -110,7 +113,20 @@ class OrderPage extends Component {
     const { loading } = this.state
 
     return (
-      <Container>
+         <Dimmer.Dimmable as={Container} dimmed={this.state.orderSuccess}>
+         
+
+          <Dimmer active={this.state.orderSuccess} onClickOutside={() => this.setState({orderSuccess:false})}>
+            <Header as='h2' icon inverted>
+              <Icon name='check' />
+             Order Placed SuccessFully
+            </Header>
+            <div>
+            <Button onClick={() => this.setState({orderSuccess:false}) } >Okay</Button>
+            </div>
+          </Dimmer>
+
+       
         {this.state.pageLoading ? (
           <Dimmer active>
             <Loader>Loading</Loader>
@@ -217,7 +233,8 @@ class OrderPage extends Component {
             <Message info>Note : Minimum Value are Displayed initially</Message>
           )}
         </Segment>
-      </Container>
+        </Dimmer.Dimmable>
+
     )
   }
 }
